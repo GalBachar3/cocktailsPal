@@ -10,29 +10,31 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
-    var createNewAccount: TextView? = null
+class RegisterActivity : AppCompatActivity() {
+    var alreadyHaveAccount: TextView? = null
     var inputEmail: EditText? = null
     var inputPassword: EditText? = null
-    var btnLogin: Button? = null
+    var inputConfirmPassword: EditText? = null
+    var btnRegister: Button? = null
     var progressDialog: ProgressDialog? = null
     protected override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        createNewAccount = findViewById(R.id.createNewAccount)
+        setContentView(R.layout.activity_register)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        inputEmail = findViewById(R.id.inputEmail)
-        inputPassword = findViewById(R.id.inputPassword)
-        btnLogin = findViewById(R.id.btnLogin)
+        alreadyHaveAccount = findViewById<TextView>(R.id.alreadyHaveAccount)
+        inputEmail = findViewById<EditText>(R.id.inputEmail)
+        inputPassword = findViewById<EditText>(R.id.inputPassword)
+        inputConfirmPassword = findViewById<EditText>(R.id.inputConfirmPassword)
+        btnRegister = findViewById<Button>(R.id.btnRegister)
         progressDialog = ProgressDialog(this)
-        createNewAccount!!.setOnClickListener { view: View? ->
+        alreadyHaveAccount!!.setOnClickListener { view: View? ->
             startActivity(
                 Intent(
-                    this@MainActivity,
-                    RegisterActivity::class.java
+                    this@RegisterActivity,
+                    MainActivity::class.java
                 )
             )
         }
