@@ -18,7 +18,7 @@ class UserModel private constructor() {
     private val firebaseModel: FirebaseModel = FirebaseModel()
     var localDb: AppLocalDbRepository = AppLocalDb.appDb
 
-    interface Listener<T> {
+    fun interface Listener<T> {
         fun onComplete(data: Task<AuthResult?>)
     }
 
@@ -33,14 +33,18 @@ class UserModel private constructor() {
 
     fun registerUser(user: User?, listener: Listener<Task<AuthResult?>?>) {
         firebaseModel.registerUser(
-            user,
-            Listener<Task<AuthResult>> { task: Task<AuthResult?>? -> listener.onComplete(task) })
+            user
+        ) { task: Task<AuthResult?>? -> task?.let { listener.onComplete(it) } }
     }
 
     fun loginUser(user: User?, listener: Listener<Task<AuthResult?>?>) {
         firebaseModel.loginUser(
             user,
-            Listener<Task<AuthResult>> { task: Task<AuthResult?>? -> listener.onComplete(task) })
+            Listener<Task<AuthResult>> { task: Task<AuthResult?>? ->
+                if (task != null) {
+                    listener.onComplete(task)
+                }
+            })
     }
 
     companion object {

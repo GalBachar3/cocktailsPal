@@ -30,10 +30,10 @@ class FirebaseModel {
     }
 
     fun registerUser(
-        user: User,
+        user: User?,
         listener: UserModel.Listener<Task<AuthResult>?>
     ) {
-        mAuth.createUserWithEmailAndPassword(user.email.toString(), user.password.toString())
+        mAuth.createUserWithEmailAndPassword(user?.email.toString(), user?.password.toString())
             .addOnCompleteListener(object : OnCompleteListener<AuthResult?> {
                 override fun onComplete(p0: Task<AuthResult?>) {
                     listener.onComplete(p0)
@@ -42,10 +42,10 @@ class FirebaseModel {
     }
 
     fun loginUser(
-        user: User,
-        listener: UserModel.Listener<Task<AuthResult>?>
+        user: User?,
+        listener: UserModel.Listener<Task<AuthResult>>
     ) {
-        mAuth.signInWithEmailAndPassword(user.email.toString(), user.password!!)
+        mAuth.signInWithEmailAndPassword(user?.email.toString(), user?.password!!)
             .addOnCompleteListener(object : OnCompleteListener<AuthResult?> {
                 override fun onComplete(p0: Task<AuthResult?>) {
                     listener.onComplete(p0)

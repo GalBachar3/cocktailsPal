@@ -69,9 +69,9 @@ class User {
 
         var localLastUpdate: Long?
             get() {
-                var sharedPref: SharedPreferences = MyApplication.Companion.myContext
-                    .getSharedPreferences("TAG", Context.MODE_PRIVATE);
-                return sharedPref.getLong(LOCAL_LAST_UPDATED, 0)
+                var sharedPref: SharedPreferences? = MyApplication.Companion.myContext
+                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE);
+                return sharedPref?.getLong(LOCAL_LAST_UPDATED, 0)
             }
             set(time) {
                 val sharedPref: SharedPreferences? = MyApplication.Companion.myContext
