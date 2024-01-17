@@ -15,7 +15,6 @@ class FirebaseModel {
     var storage: FirebaseStorage
     var mAuth: FirebaseAuth
     var mUser: FirebaseUser?
-    var emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
     init {
         db = FirebaseFirestore.getInstance()
@@ -36,5 +35,9 @@ class FirebaseModel {
     fun loginUser(user: User, listener: UserModel.Listener<Task<AuthResult>>) {
         mAuth.signInWithEmailAndPassword(user.email.toString(), user.password.toString())
             .addOnCompleteListener { task -> listener.onComplete(task) }
+    }
+
+    fun isUserLoggedIn(): Boolean {
+        return mAuth.currentUser != null
     }
 }

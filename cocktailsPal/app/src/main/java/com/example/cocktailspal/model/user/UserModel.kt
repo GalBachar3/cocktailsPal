@@ -57,4 +57,8 @@ class UserModel private constructor() {
             return _instance
         }
     }
+
+    fun isUserLoggedIn(): Boolean {
+        return firebaseModel!!.isUserLoggedIn()
+    }
 }
