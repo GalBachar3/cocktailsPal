@@ -15,8 +15,8 @@ import java.util.concurrent.Executors
 class UserModel private constructor() {
     private val executor: Executor = Executors.newSingleThreadExecutor()
     private val mainHandler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
-    private val firebaseModel: FirebaseModel = FirebaseModel()
-    var localDb: AppLocalDbRepository = AppLocalDb.appDb
+    private val firebaseModel: FirebaseModel? = FirebaseModel()
+    var localDb: AppLocalDbRepository? = AppLocalDb.appDb
 
     fun interface Listener<T> {
         fun onComplete(data: Task<AuthResult?>)
@@ -32,19 +32,23 @@ class UserModel private constructor() {
     )
 
     fun registerUser(user: User?, listener: Listener<Task<AuthResult?>?>) {
-        firebaseModel.registerUser(
-            user
-        ) { task: Task<AuthResult?>? -> task?.let { listener.onComplete(it) } }
+        if (user != null) {
+            firebaseModel?.registerUser(
+                user
+            ) { task: Task<AuthResult?>? -> task?.let { listener.onComplete(it) } }
+        }
     }
 
     fun loginUser(user: User?, listener: Listener<Task<AuthResult?>?>) {
-        firebaseModel.loginUser(
-            user,
-            Listener<Task<AuthResult>> { task: Task<AuthResult?>? ->
+        if (user != null) {
+            firebaseModel?.loginUser(
+                user
+            ) { task: Task<AuthResult?>? ->
                 if (task != null) {
                     listener.onComplete(task)
                 }
-            })
+            }
+        }
     }
 
     companion object {

@@ -63,13 +63,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun loginUser(user: User) {
         UserModel.instance().loginUser(user) { task ->
-            if (task.isSuccessful()) {
+            if (task.isSuccessful) {
                 progressDialog?.dismiss()
                 sendUserToNextActivity()
                 Toast.makeText(this@MainActivity, "Login Successful", Toast.LENGTH_SHORT).show()
             } else {
                 progressDialog?.dismiss()
-                Toast.makeText(this@MainActivity, "" + task.getException(), Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "" + task.exception, Toast.LENGTH_SHORT)
                     .show()
             }
         }
