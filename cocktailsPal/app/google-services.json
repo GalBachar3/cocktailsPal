@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1015480060674",
+    "project_id": "cocktailspal-76929",
+    "storage_bucket": "cocktailspal-76929.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015480060674:android:956b1e7835aaaead66d01b",
+        "android_client_info": {
+          "package_name": "com.example.cocktailspal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAavd5Kk2vrMyNfMtspXOCCAHX6E_-GROk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

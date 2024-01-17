@@ -1,8 +1,9 @@
-//package com.example.myrecipes.model.recipe
-//
-//import retrofit2.Call
-//
-//interface RecipeApi {
-//    @get:GET("/random.php")
-//    val randomRecipe: Call<RecipeSearchResult?>?
-//}
+package com.example.cocktailspal.model.cocktail
+
+import retrofit2.Call
+import retrofit2.http.GET
+
+interface CocktailApi {
+    @get:GET("/random.php")
+    val randomCocktail: Call<CocktailSearchResult?>?
+}

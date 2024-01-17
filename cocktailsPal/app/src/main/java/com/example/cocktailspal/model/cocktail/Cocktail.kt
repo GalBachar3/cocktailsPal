@@ -9,7 +9,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 
 @Entity
-class Recipe {
+class Cocktail {
     @PrimaryKey
     var id = ""
     var name: String? = ""
@@ -70,7 +70,7 @@ class Recipe {
         const val COLLECTION = "recipes"
         const val LAST_UPDATED = "lastUpdated"
         const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
-        fun fromJson(json: Map<String?, Any?>): Recipe {
+        fun fromJson(json: Map<String?, Any?>): Cocktail {
             val id = json[ID] as String?
             val name = json[NAME] as String?
             val category = json[CATEGORY] as String?
@@ -78,7 +78,7 @@ class Recipe {
             val instructions = json[INSTRUCTIONS] as String?
             val imgUrl = json[IMG_URL] as String?
             //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
-            val rcp = Recipe(id!!, name, category, area, instructions, imgUrl)
+            val rcp = Cocktail(id!!, name, category, area, instructions, imgUrl)
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
                 rcp.lastUpdated = time!!.seconds

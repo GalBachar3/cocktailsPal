@@ -6,19 +6,18 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.cocktailspal.model.cocktail.Recipe
 
 @Dao
-interface RecipeDao {
-    @get:Query("select * from Recipe")
-    val all: LiveData<List<Recipe?>?>?
+interface CocktailDao {
+    @get:Query("select * from Cocktail")
+    val all: LiveData<List<Cocktail?>?>?
 
-    @Query("select * from Recipe where id = :recipeId")
-    fun getRecipeById(recipeId: String?): Recipe?
+    @Query("select * from Cocktail where id = :cocktailId")
+    fun getCocktailById(cocktailId: String?): Cocktail?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg recipes: Recipe?)
+    fun insertAll(vararg cocktails: Cocktail?)
 
     @Delete
-    fun delete(recipe: Recipe?)
+    fun delete(cocktail: Cocktail?)
 }
