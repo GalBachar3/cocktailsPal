@@ -6,12 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.cocktailspal.model.firebase.FirebaseModel
 import com.example.cocktailspal.model.localDB.AppLocalDb
 import com.example.cocktailspal.model.localDB.AppLocalDbRepository
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import retrofit2.Callback
-import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -19,34 +13,6 @@ class CocktailModel private constructor() {
     private val executor: Executor = Executors.newSingleThreadExecutor()
     private val firebaseModel: FirebaseModel = FirebaseModel()
     var localDb: AppLocalDbRepository? = AppLocalDb.appDb
-    val BASE_URL = "https://www.themealdb.com/api/json/v1/1/"
-    var retrofit: Retrofit
-    var cocktailApi: CocktailApi
-    val randomRecipe: LiveData<List<Cocktail>>
-        get() {
-            val data: MutableLiveData<List<Cocktail>> = MutableLiveData<List<Cocktail>>()
-            val call: Call<CocktailSearchResult?>? = cocktailApi.randomCocktail
-            call?.enqueue(object:Callback<CocktailSearchResult?> {
-                override fun onFailure(call: Call<CocktailSearchResult?>?, t: Throwable?) {
-                    Log.d("TAG", "----- getRandomRecipe fail")
-                }
-
-                override fun onResponse(
-                    call: Call<CocktailSearchResult?>,
-                    response: retrofit2.Response<CocktailSearchResult?>
-                ) {
-                    if (response.isSuccessful()) {
-                        val res: CocktailSearchResult? = response.body()
-                        if (res != null) {
-                            data.setValue(res.cocktails)
-                        }
-                    } else {
-                        Log.d("TAG", "----- getRandomRecipe response error")
-                    }
-                }
-            })
-            return data
-        }
 
     enum class LoadingState {
         LOADING,
@@ -63,17 +29,6 @@ class CocktailModel private constructor() {
     }
 
     private var cocktailsList: LiveData<List<Cocktail?>?>? = null
-
-    init {
-        val gson: Gson = GsonBuilder()
-            .setLenient()
-            .create()
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-        cocktailApi = retrofit.create(CocktailApi::class.java)
-    }
 
     val allRecipes: LiveData<List<Cocktail?>?>?
         get() {

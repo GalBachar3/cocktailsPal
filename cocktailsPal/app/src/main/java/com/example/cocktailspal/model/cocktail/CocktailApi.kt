@@ -4,6 +4,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface CocktailApi {
-    @get:GET("/random.php")
+    @get:GET("/api/json/v1/1/random.php")
     val randomCocktail: Call<CocktailSearchResult?>?
 }
