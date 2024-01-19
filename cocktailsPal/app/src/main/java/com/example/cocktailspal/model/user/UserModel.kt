@@ -1,25 +1,16 @@
 package com.example.cocktailspal.model.user
 
-import android.os.Handler
-import android.os.Looper
-import androidx.core.os.HandlerCompat
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import com.example.cocktailspal.model.firebase.FirebaseModel
-import com.example.cocktailspal.model.localDB.AppLocalDb
-import com.example.cocktailspal.model.localDB.AppLocalDbRepository
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 class UserModel private constructor() {
-    private val executor: Executor = Executors.newSingleThreadExecutor()
-    private val mainHandler: Handler = HandlerCompat.createAsync(Looper.getMainLooper())
     private val firebaseModel: FirebaseModel? = FirebaseModel()
-    var localDb: AppLocalDbRepository? = AppLocalDb.appDb
 
     fun interface Listener<T> {
-        fun onComplete(data: Task<AuthResult?>)
+        fun onComplete(data: T)
     }
 
     enum class LoadingState {
@@ -31,22 +22,20 @@ class UserModel private constructor() {
         LoadingState.NOT_LOADING
     )
 
-    fun registerUser(user: User?, listener: Listener<Task<AuthResult?>?>) {
+    fun registerUser(user: User?, listener: Listener<Task<Void?>?>) {
         if (user != null) {
             firebaseModel?.registerUser(
                 user
-            ) { task: Task<AuthResult?>? -> task?.let { listener.onComplete(it) } }
+            ) { task: Task<Void?>? -> run { listener.onComplete(task) } }
         }
     }
 
-    fun loginUser(user: User?, listener: Listener<Task<AuthResult?>?>) {
+    fun loginUser(user: User?, listener: Listener<Task<AuthResult>>) {
         if (user != null) {
             firebaseModel?.loginUser(
                 user
-            ) { task: Task<AuthResult?>? ->
-                if (task != null) {
-                    listener.onComplete(task)
-                }
+            ) { task: Task<AuthResult> ->
+                listener.onComplete(task)
             }
         }
     }
@@ -60,5 +49,18 @@ class UserModel private constructor() {
 
     fun isUserLoggedIn(): Boolean {
         return firebaseModel!!.isUserLoggedIn()
+    }
+
+    val userProfileDetails: User?
+        get() = firebaseModel?.userProfileDetails
+
+    fun updateUserProfile(user: User?, bitmap: Bitmap?, listener: Listener<Task<Void?>?>) {
+        if (user != null) {
+            firebaseModel?.updateUserProfile(user, null) { task ->
+                listener.onComplete(
+                    task
+                )
+            }
+        }
     }
 }
