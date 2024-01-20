@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1015480060674",
-    "project_id": "cocktailspal-76929",
-    "storage_bucket": "cocktailspal-76929.appspot.com"
+    "project_number": "537390569283",
+    "project_id": "cocktailspal",
+    "storage_bucket": "cocktailspal.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1015480060674:android:956b1e7835aaaead66d01b",
+        "mobilesdk_app_id": "1:537390569283:android:a17cf46d3aba1ac57041f6",
         "android_client_info": {
           "package_name": "com.example.cocktailspal"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAavd5Kk2vrMyNfMtspXOCCAHX6E_-GROk"
+          "current_key": "AIzaSyDl4dSyIcUwXFsLfw7uiiRUv6l3oziomUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537390569283:android:ad10f910a94fe04a7041f6",
+        "android_client_info": {
+          "package_name": "com.example.myrecipes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl4dSyIcUwXFsLfw7uiiRUv6l3oziomUU"
         }
       ],
       "services": {
