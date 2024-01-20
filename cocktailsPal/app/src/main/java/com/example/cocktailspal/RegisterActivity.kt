@@ -16,6 +16,8 @@ import com.example.cocktailspal.model.user.UserModel
 class RegisterActivity : AppCompatActivity() {
     var alreadyHaveAccount: TextView? = null
     var inputEmail: EditText? = null
+    var inputFullName: EditText? = null
+    var inputUserName: EditText? = null
     var inputPassword: EditText? = null
     var inputConfirmPassword: EditText? = null
     var btnRegister: Button? = null
@@ -28,8 +30,9 @@ class RegisterActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        alreadyHaveAccount = findViewById<TextView>(R.id.alreadyHaveAccount)
-        inputEmail = findViewById<EditText>(R.id.inputEmail)
+        alreadyHaveAccount = findViewById(R.id.alreadyHaveAccount)
+        inputEmail = findViewById(R.id.inputEmail)
+        inputFullName = findViewById(R.id.inputFullName)
         inputPassword = findViewById<EditText>(R.id.inputPassword)
         inputConfirmPassword = findViewById<EditText>(R.id.inputConfirmPassword)
         btnRegister = findViewById<Button>(R.id.btnRegister)
@@ -48,6 +51,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun PerformAuth() {
         val email: String = inputEmail?.text.toString()
         val password: String = inputPassword?.text.toString()
+        val fullName = inputFullName!!.text.toString()
         val confirmPassword: String = inputConfirmPassword?.text.toString()
         if (!email.matches(emailPattern.toRegex())) {
             inputEmail?.error = "Enter correct email"
@@ -55,6 +59,9 @@ class RegisterActivity : AppCompatActivity() {
         } else if (password.isEmpty() || password.length < 6) {
             inputPassword?.error = "Enter proper password"
             inputPassword?.requestFocus()
+        } else if (fullName.isEmpty()) {
+            inputFullName!!.error = "Enter full name"
+            inputFullName!!.requestFocus()
         } else if (password != confirmPassword) {
             inputConfirmPassword?.error = "Password not match both fields"
             inputConfirmPassword?.requestFocus()
@@ -63,7 +70,7 @@ class RegisterActivity : AppCompatActivity() {
             progressDialog?.setTitle("Registration")
             progressDialog?.setCanceledOnTouchOutside(false)
             progressDialog?.show()
-            registerUser(User(email, password))
+            registerUser(User(email, password, fullName))
         }
     }
 
@@ -85,7 +92,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun sendUserToNextActivity() {
-        val intent: Intent = Intent(this@RegisterActivity, HomeActivity::class.java)
+        val intent: Intent = Intent(this@RegisterActivity, UserProfileActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }

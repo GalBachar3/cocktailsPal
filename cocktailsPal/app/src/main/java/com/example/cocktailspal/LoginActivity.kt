@@ -22,13 +22,7 @@ class LoginActivity : AppCompatActivity() {
     var progressDialog: ProgressDialog? = null
     protected override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login);
-
-        if (UserModel.instance().isUserLoggedIn()) {
-            sendUserToNextActivity();
-        } else {
-
-        }
+        setContentView(R.layout.activity_login)
         createNewAccount = findViewById<TextView>(R.id.createNewAccount)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -82,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun sendUserToNextActivity() {
-        val intent: Intent = Intent(this@LoginActivity, HomeActivity::class.java)
+        val intent: Intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }

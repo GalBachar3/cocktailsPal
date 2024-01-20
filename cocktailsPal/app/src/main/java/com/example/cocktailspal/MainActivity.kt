@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (UserModel.instance().isUserLoggedIn()) {
-            sendUserToNextActivity(HomeActivity::class.java)
+            sendUserToNextActivity(UserProfileActivity::class.java)
         } else {
             sendUserToNextActivity(LoginActivity::class.java)
         }
