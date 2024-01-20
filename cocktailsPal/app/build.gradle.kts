@@ -8,6 +8,10 @@ android {
     namespace = "com.example.cocktailspal"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.cocktailspal"
         minSdk = 25
@@ -77,11 +81,11 @@ dependencies {
     implementation("org.chromium.net:cronet-embedded:113.5672.61")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.google.android.material:material:1.4.0")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.navigation:navigation-fragment-ktx:$2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:$2.7.6")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
+    implementation("com.google.android.material:material:1.11.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))

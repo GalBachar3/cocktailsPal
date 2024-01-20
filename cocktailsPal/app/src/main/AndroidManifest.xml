@@ -13,11 +13,6 @@
         android:theme="@style/Theme.CocktailsPal"
         tools:targetApi="31">
         <activity
-            android:name=".UserProfileActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.Light">
-        </activity>
-        <activity
             android:name=".LoginActivity"
             android:exported="false"
             android:label="@string/app_name"

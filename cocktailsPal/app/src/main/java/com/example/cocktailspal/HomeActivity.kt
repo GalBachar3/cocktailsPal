@@ -35,19 +35,27 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            navController?.popBackStack()
-        } else if (item.itemId == R.id.logout) {
-            UserModel.instance().logout()
-            sendUserToNextActivity(LoginActivity::class.java)
-        } else if (item.itemId == R.id.UserProfileActivity) {
-            sendUserToNextActivity(UserProfileActivity::class.java)
-        } else {
-            fragmentMenuId = item.itemId
-            return NavigationUI.onNavDestinationSelected(item, navController!!)
+        when (item.itemId) {
+            android.R.id.home -> {
+                navController?.popBackStack()
+            }
+            R.id.logout -> {
+                UserModel.instance().logout()
+                sendUserToNextActivity(LoginActivity::class.java)
+            }
+            R.id.addCocktailFragment -> {
+                // Make sure navController is not null and the navigation graph is set up correctly
+                navController?.navigate(R.id.addCocktailFragment)
+            }
+            else -> {
+                fragmentMenuId = item.itemId
+                return NavigationUI.onNavDestinationSelected(item, navController!!)
+            }
         }
+
         return super.onOptionsItemSelected(item)
     }
+
 
     private fun sendUserToNextActivity(clazz: Class<*>) {
         val intent = Intent(this@HomeActivity, clazz)
