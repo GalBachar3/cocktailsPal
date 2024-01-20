@@ -98,7 +98,9 @@ class FirebaseModel {
 
     fun loginUser(user: User, listener: UserModel.Listener<Task<AuthResult>>) {
         mAuth.signInWithEmailAndPassword(user.email.toString(), user.password.toString())
-            .addOnCompleteListener { task -> listener.onComplete(task) }
+            .addOnCompleteListener { task ->
+                mUser=mAuth.getCurrentUser();
+                listener.onComplete(task) }
     }
 
     fun isUserLoggedIn(): Boolean {
@@ -123,5 +125,10 @@ class FirebaseModel {
                     callback.onComplete(list)
                 }
             })
+    }
+
+    fun logout() {
+        mAuth.signOut()
+        mUser = null
     }
 }

@@ -92,7 +92,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun sendUserToNextActivity() {
-        val intent: Intent = Intent(this@RegisterActivity, UserProfileActivity::class.java)
+        val intent: Intent = Intent(this@RegisterActivity, HomeActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }

@@ -56,11 +56,15 @@ class UserModel private constructor() {
 
     fun updateUserProfile(user: User?, bitmap: Bitmap?, listener: Listener<Task<Void?>?>) {
         if (user != null) {
-            firebaseModel?.updateUserProfile(user, null) { task ->
+            firebaseModel?.updateUserProfile(user, bitmap) { task ->
                 listener.onComplete(
                     task
                 )
             }
         }
+    }
+
+    fun logout() {
+        firebaseModel!!.logout()
     }
 }

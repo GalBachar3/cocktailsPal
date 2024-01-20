@@ -19,7 +19,7 @@ class CocktailModel private constructor() {
         NOT_LOADING
     }
 
-    val EventStudentsListLoadingState: MutableLiveData<LoadingState> =
+    val EventListLoadingState: MutableLiveData<LoadingState> =
         MutableLiveData<LoadingState>(
             LoadingState.NOT_LOADING
         )
@@ -40,7 +40,7 @@ class CocktailModel private constructor() {
         }
 
     fun refreshAllRecipes() {
-        EventStudentsListLoadingState.value = LoadingState.LOADING
+        EventListLoadingState.value = LoadingState.LOADING
 
         // get local last update
         val localLastUpdate = Cocktail.localLastUpdate
@@ -70,7 +70,7 @@ class CocktailModel private constructor() {
                     }
                     // update local last update
                     Cocktail.localLastUpdate = time
-                    EventStudentsListLoadingState.postValue(LoadingState.NOT_LOADING)
+                    EventListLoadingState.postValue(LoadingState.NOT_LOADING)
                 }
             }
             }
