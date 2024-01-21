@@ -1,6 +1,7 @@
 package com.example.cocktailspal
 
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,8 +18,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
-
+import androidx.navigation.Navigation.findNavController
 import com.example.cocktailspal.databinding.FragmentAddCocktailBinding
+import com.example.cocktailspal.model.cocktail.Cocktail
+import com.example.cocktailspal.model.cocktail.CocktailModel
+import com.example.cocktailspal.model.user.UserModel
+
+
 class AddCocktailFragment : Fragment() {
 
     lateinit var  binding: FragmentAddCocktailBinding
@@ -65,8 +71,34 @@ class AddCocktailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAddCocktailBinding.inflate(inflater, container, false)
-        val view: View = binding.getRoot()
-        binding.saveBtn.setOnClickListener { view1 -> }
+        val view: View = binding.root
+
+        binding.saveBtn.setOnClickListener { view1 ->
+            val name = binding.nameEt.text.toString()
+            val category = binding.categoryEt.text.toString()
+            val instructions = binding.instructionsEt.text.toString()
+            val ingredients: String = binding.instructionsEt.text.toString()
+            val userId: String? = UserModel.instance().userProfileDetails?.id
+            val imgUrl: String? = binding.cocktailImg.toString()
+            val cocktail = Cocktail(name, category, instructions, ingredients, userId, imgUrl)
+            if (isAvatarSelected) {
+                binding.cocktailImg.setDrawingCacheEnabled(true)
+                binding.cocktailImg.buildDrawingCache()
+                val bitmap =
+                    (binding.cocktailImg.drawable as BitmapDrawable).bitmap
+                CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
+                    if (url != null) {
+                        cocktail.imgUrl = url.toString()
+                    }
+                    CocktailModel.instance()
+                        .addCocktail(cocktail) { findNavController(view1).popBackStack() }
+                }
+            } else {
+                CocktailModel.instance()
+                    .addCocktail(cocktail) { findNavController(view1).popBackStack() }
+            }
+        }
+
         binding.cancellBtn.setOnClickListener { view1 ->
             Navigation.findNavController(view1).popBackStack(
                 R.id.userProfileFragment,

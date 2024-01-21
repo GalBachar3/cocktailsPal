@@ -78,13 +78,13 @@ class Cocktail {
             val instructions = json[INSTRUCTIONS] as String?
             val imgUrl = json[IMG_URL] as String?
             //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
-            val rcp = Cocktail(id!!, name, category, area, instructions, imgUrl)
+            val cocktail = Cocktail(id!!, name, category, area, instructions, imgUrl)
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
-                rcp.lastUpdated = time!!.seconds
+                cocktail.lastUpdated = time!!.seconds
             } catch (e: Exception) {
             }
-            return rcp
+            return cocktail
         }
 
         var localLastUpdate: Long?

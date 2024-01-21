@@ -1,5 +1,6 @@
 package com.example.cocktailspal.model.cocktail
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import com.example.cocktailspal.model.localDB.AppLocalDb
 import com.example.cocktailspal.model.localDB.AppLocalDbRepository
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+
 
 class CocktailModel private constructor() {
     private val executor: Executor = Executors.newSingleThreadExecutor()
@@ -34,12 +36,12 @@ class CocktailModel private constructor() {
         get() {
             if (cocktailsList == null) {
                 cocktailsList = localDb?.cocktailDao()?.all
-                refreshAllRecipes()
+                refreshAllCocktails()
             }
             return cocktailsList
         }
 
-    fun refreshAllRecipes() {
+    fun refreshAllCocktails() {
         EventListLoadingState.value = LoadingState.LOADING
 
         // get local last update
@@ -54,9 +56,9 @@ class CocktailModel private constructor() {
                 executor.execute {
                     Log.d("TAG", " firebase return : ${list?.size}")
                     var time = localLastUpdate
-                    list?.forEach { rcp ->
+                    list?.forEach { cocktail ->
                         // insert new records into ROOM
-                        rcp?.let {
+                        cocktail?.let {
                             localDb?.cocktailDao()?.insertAll(it)
                             if (time!! < it.lastUpdated!!) {
                                 time = it.lastUpdated
@@ -76,6 +78,17 @@ class CocktailModel private constructor() {
             }
         firebaseModel.getAllCocktailsSince(localLastUpdate, callback);
         }
+
+    fun addCocktail(cocktail: Cocktail?, listener: Listener<Void?>) {
+        firebaseModel.addCocktail(cocktail!!) { Void ->
+            refreshAllCocktails()
+            listener.onComplete(null)
+        }
+    }
+
+    fun uploadImage(name: String?, bitmap: Bitmap?, listener: Listener<String?>?) {
+        firebaseModel.uploadImage(name!!, bitmap!!, listener!!)
+    }
 
     companion object {
         val _instance = CocktailModel()
