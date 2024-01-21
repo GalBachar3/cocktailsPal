@@ -17,6 +17,7 @@ class Cocktail {
     var area: String? = ""
     var instructions: String? = ""
     var imgUrl: String? = ""
+    var userId: String? = ""
 
     //    public List<String> getIngredients() {
     //        return ingredients;
@@ -46,6 +47,38 @@ class Cocktail {
         //        this.ingredients = ingredients;
     }
 
+    constructor(
+        id: String,
+        name: String?,
+        category: String?,
+        area: String?,
+        instructions: String?,
+        imgUrl: String?,
+        userId: String?
+    ) {
+        this.id = id
+        this.name = name
+        this.category = category
+        this.area = area
+        this.instructions = instructions
+        this.imgUrl = imgUrl
+        this.userId = userId
+    }
+
+    constructor(
+        id: String,
+        name: String?,
+        category: String?,
+        area: String?,
+        instructions: String?,
+        ) {
+        this.id = id
+        this.name = name
+        this.category = category
+        this.area = area
+        this.instructions = instructions
+    }
+
     fun toJson(): Map<String, Any?> {
         val json: MutableMap<String, Any?> = HashMap()
         json[ID] = id
@@ -56,6 +89,7 @@ class Cocktail {
         json[IMG_URL] = imgUrl
         //        json.put(INGREDIENTS, getIngredients());
         json[LAST_UPDATED] = FieldValue.serverTimestamp()
+        json[USER_ID] = userId;
         return json
     }
 
@@ -67,7 +101,8 @@ class Cocktail {
         const val INSTRUCTIONS = "instructions"
         const val IMG_URL = "imgUrl"
         const val INGREDIENTS = "ingredients"
-        const val COLLECTION = "recipes"
+        const val COLLECTION = "cocktails"
+        const val USER_ID = "userId"
         const val LAST_UPDATED = "lastUpdated"
         const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
@@ -77,8 +112,9 @@ class Cocktail {
             val area = json[AREA] as String?
             val instructions = json[INSTRUCTIONS] as String?
             val imgUrl = json[IMG_URL] as String?
+            val userId = json[USER_ID] as String?
             //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
-            val cocktail = Cocktail(id!!, name, category, area, instructions, imgUrl)
+            val cocktail = Cocktail(id!!, name, category, area, instructions, imgUrl, userId)
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
                 cocktail.lastUpdated = time!!.seconds
@@ -94,13 +130,16 @@ class Cocktail {
                 return sharedPref?.getLong(LOCAL_LAST_UPDATED, 0)
             }
             set(time) {
-                val sharedPref: SharedPreferences? =
-                    MyApplication.myContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                val editor: SharedPreferences.Editor = sharedPref!!.edit()
-                if (time != null) {
-                    editor.putLong(LOCAL_LAST_UPDATED, time)
+                MyApplication.myContext?.let { context ->
+                    val sharedPref: SharedPreferences =
+                        context.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    val editor: SharedPreferences.Editor = sharedPref.edit()
+
+                    time?.let {
+                        editor.putLong(LOCAL_LAST_UPDATED, it)
+                        editor.apply() // Use apply() for asynchronous write
+                    }
                 }
-                editor.commit()
             }
     }
 }

@@ -79,7 +79,7 @@ class AddCocktailFragment : Fragment() {
             val instructions = binding.instructionsEt.text.toString()
             val ingredients: String = binding.instructionsEt.text.toString()
             val userId: String? = UserModel.instance().userProfileDetails?.id
-            val imgUrl: String? = binding.cocktailImg.toString()
+            val imgUrl: String? = binding.cocktailImg.tag as? String
             val cocktail = Cocktail(name, category, instructions, ingredients, userId, imgUrl)
             if (isAvatarSelected) {
                 binding.cocktailImg.setDrawingCacheEnabled(true)

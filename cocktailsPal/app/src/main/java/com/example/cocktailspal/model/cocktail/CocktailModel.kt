@@ -65,11 +65,6 @@ class CocktailModel private constructor() {
                             }
                         }
                     }
-                    try {
-                        Thread.sleep(3000)
-                    } catch (e: InterruptedException) {
-                        e.printStackTrace()
-                    }
                     // update local last update
                     Cocktail.localLastUpdate = time
                     EventListLoadingState.postValue(LoadingState.NOT_LOADING)
@@ -79,14 +74,14 @@ class CocktailModel private constructor() {
         firebaseModel.getAllCocktailsSince(localLastUpdate, callback);
         }
 
-    fun addCocktail(cocktail: Cocktail?, listener: Listener<Void?>) {
+    fun addCocktail(cocktail: Cocktail?, listener: () -> Boolean) {
         firebaseModel.addCocktail(cocktail!!) { Void ->
             refreshAllCocktails()
-            listener.onComplete(null)
+            listener.invoke()
         }
     }
 
-    fun uploadImage(name: String?, bitmap: Bitmap?, listener: Listener<String?>?) {
+    fun uploadImage(name: String?, bitmap: Bitmap?, listener: (Any) -> Unit) {
         firebaseModel.uploadImage(name!!, bitmap!!, listener!!)
     }
 

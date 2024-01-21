@@ -107,6 +107,12 @@ class FirebaseModel {
         return mAuth.currentUser != null
     }
     fun getAllCocktailsSince(since: Long?, callback: CocktailModel.Listener<List<Cocktail?>?>) {
+        if (since == null) {
+            // Handle the case where 'since' is null (you might want to log an error or return an empty list)
+            callback.onComplete(emptyList())
+            return
+        }
+
         db.collection(Cocktail.COLLECTION)
             .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(since!!, 0))
             .get()
@@ -130,24 +136,24 @@ class FirebaseModel {
         mUser = null
     }
 
-    fun uploadImage(name: String, bitmap: Bitmap, listener: CocktailModel.Listener<String?>) {
+    fun uploadImage(name: String, bitmap: Bitmap, listener: (Any) -> Unit) {
         val storageRef = storage.reference
         val imagesRef = storageRef.child("images/$name.jpg")
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         val uploadTask = imagesRef.putBytes(data)
-        uploadTask.addOnFailureListener { listener.onComplete(null) }.addOnSuccessListener {
+        uploadTask.addOnFailureListener { listener.invoke(true) }.addOnSuccessListener {
             imagesRef.downloadUrl.addOnSuccessListener { uri ->
-                listener.onComplete(
+                listener.invoke(
                     uri.toString()
                 )
             }
         }
     }
 
-    fun addCocktail(cocktail: Cocktail, listener: CocktailModel.Listener<Void?>) {
+    fun addCocktail(cocktail: Cocktail, listener: (Any) -> Unit) {
         db.collection(Cocktail.COLLECTION).document(cocktail.name.toString()).set(cocktail.toJson())
-            .addOnCompleteListener { listener.onComplete(null) }
+            .addOnCompleteListener { listener.invoke(true) }
     }
 }
