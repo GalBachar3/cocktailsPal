@@ -1,6 +1,7 @@
 package com.example.cocktailspal
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -17,12 +18,17 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import com.example.cocktailspal.databinding.FragmentAddCocktailBinding
 import com.example.cocktailspal.model.cocktail.Cocktail
+import com.example.cocktailspal.model.cocktail.CocktailApiModel
+import com.example.cocktailspal.model.cocktail.CocktailApiReturnObj
 import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.UserModel
+import java.io.InputStream
 
 
 class AddCocktailFragment : Fragment() {
@@ -105,8 +111,29 @@ class AddCocktailFragment : Fragment() {
                 false
             )
         }
-        binding.cameraButton.setOnClickListener { view1 -> cameraLauncher?.launch(null) }
-        binding.galleryButton.setOnClickListener { view1 -> galleryLauncher?.launch("image/*") }
+        binding.cameraButton.setOnClickListener { cameraLauncher?.launch(null) }
+        binding.galleryButton.setOnClickListener { galleryLauncher?.launch("image/*") }
+
+        binding.generateCocktailBtn.setOnClickListener { view1 ->
+            val data: LiveData<CocktailApiReturnObj> = CocktailApiModel.instance().randomCocktail
+            data.observe(
+                viewLifecycleOwner,
+                Observer<CocktailApiReturnObj> { cocktail: CocktailApiReturnObj ->
+                    binding.nameEt.setText(cocktail.name)
+                    binding.categoryEt.setText(cocktail.category)
+                    binding.instructionsEt.setText(cocktail.instructions)
+//                    binding.ingredientsEt.setText(cocktail.ingredients)
+                    val imgData: LiveData<InputStream> =
+                        CocktailApiModel.instance().getImg(cocktail.imagePath)
+                    imgData.observe(
+                        viewLifecycleOwner
+                    ) { imgStream: InputStream? ->
+                        isAvatarSelected = true
+                        binding.cocktailImg.setImageBitmap(BitmapFactory.decodeStream(imgStream))
+                    }
+                })
+        }
+
         return view
     }
 }

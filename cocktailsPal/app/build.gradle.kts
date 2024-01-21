@@ -75,6 +75,8 @@ dependencies {
     implementation("androidx.browser:browser:1.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation ("com.google.code.gson:gson:2.6.2")
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
 
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("com.google.firebase:firebase-auth:22.3.0")
