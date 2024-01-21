@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
     var btnRegister: Button? = null
     var emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
     var progressDialog: ProgressDialog? = null
+    var verifyAge: CheckBox? = null
     protected override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -37,6 +39,7 @@ class RegisterActivity : AppCompatActivity() {
         inputConfirmPassword = findViewById<EditText>(R.id.inputConfirmPassword)
         btnRegister = findViewById<Button>(R.id.btnRegister)
         progressDialog = ProgressDialog(this)
+        verifyAge = findViewById(R.id.checkBox)
         alreadyHaveAccount!!.setOnClickListener { view: View? ->
             startActivity(
                 Intent(
@@ -44,6 +47,12 @@ class RegisterActivity : AppCompatActivity() {
                     MainActivity::class.java
                 )
             )
+        }
+        verifyAge?.setOnClickListener { view: View? ->
+            if (view != null) {
+                view.isActivated = !view.isActivated
+                view.isFocusable = !view.isFocusable
+            }
         }
         btnRegister!!.setOnClickListener { view: View? -> PerformAuth() }
     }
@@ -53,6 +62,7 @@ class RegisterActivity : AppCompatActivity() {
         val password: String = inputPassword?.text.toString()
         val fullName = inputFullName!!.text.toString()
         val confirmPassword: String = inputConfirmPassword?.text.toString()
+        val isAgeVerified: Boolean = verifyAge?.isActivated == true
         if (!email.matches(emailPattern.toRegex())) {
             inputEmail?.error = "Enter correct email"
             inputEmail?.requestFocus()
@@ -65,7 +75,11 @@ class RegisterActivity : AppCompatActivity() {
         } else if (password != confirmPassword) {
             inputConfirmPassword?.error = "Password not match both fields"
             inputConfirmPassword?.requestFocus()
-        } else {
+        } else if(!isAgeVerified){
+            verifyAge?.error = "You must be over 18 to use CocktailsPal"
+            verifyAge?.requestFocus()
+        }
+        else {
             progressDialog?.setMessage("Please wait while registration...")
             progressDialog?.setTitle("Registration")
             progressDialog?.setCanceledOnTouchOutside(false)
