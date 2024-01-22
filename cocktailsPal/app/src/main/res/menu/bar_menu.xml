@@ -10,4 +10,9 @@
         android:id="@+id/addCocktailFragment"
         android:icon="@android:drawable/ic_input_add"
         android:title="Add Cocktail" />
+
+    <item
+        android:id="@+id/cocktailsListFragment"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home" />
 </menu>

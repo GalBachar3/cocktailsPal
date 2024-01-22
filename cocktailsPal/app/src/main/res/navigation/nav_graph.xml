@@ -18,4 +18,11 @@
         android:label="add cocktail"
         tools:layout="@layout/fragment_add_cocktail">
     </fragment>
+
+    <fragment
+        android:id="@+id/cocktilsListFragment"
+        android:name="com.example.cocktailspal.CocktailsListFragment"
+        android:label="Cocktails list"
+        tools:layout="@layout/fragment_cocktails_list">
+    </fragment>
 </navigation>

@@ -32,7 +32,7 @@ class CocktailModel private constructor() {
 
     private var cocktailsList: LiveData<List<Cocktail?>?>? = null
 
-    val allRecipes: LiveData<List<Cocktail?>?>?
+    val allCocktails: LiveData<List<Cocktail?>?>?
         get() {
             if (cocktailsList == null) {
                 cocktailsList = localDb?.cocktailDao()?.all
