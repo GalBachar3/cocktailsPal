@@ -72,6 +72,20 @@ class Cocktail: Serializable {
         category: String?,
         area: String?,
         instructions: String?,
+        userId: String?
+    ) {
+        this.name = name
+        this.category = category
+        this.area = area
+        this.instructions = instructions
+        this.userId = userId
+    }
+
+    constructor(
+        name: String?,
+        category: String?,
+        area: String?,
+        instructions: String?,
         ) {
         this.name = name
         this.category = category
