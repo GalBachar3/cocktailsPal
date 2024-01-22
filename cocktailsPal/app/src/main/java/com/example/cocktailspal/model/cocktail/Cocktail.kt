@@ -19,6 +19,7 @@ class Cocktail: Serializable {
     var instructions: String? = ""
     var imgUrl: String? = ""
     var userId: String? = ""
+    var userName: String? = ""
 
     //    public List<String> getIngredients() {
     //        return ingredients;
@@ -36,13 +37,15 @@ class Cocktail: Serializable {
         category: String?,
         area: String?,
         instructions: String?,
-        userId: String? //            ,  List<String> ingredients
+        userId: String?,
+        userName: String?
     ) {
         this.name = name
         this.category = category
         this.area = area
         this.instructions = instructions
         this.userId = userId
+        this.userName = userName
         //        this.ingredients = ingredients;
     }
 
@@ -52,7 +55,8 @@ class Cocktail: Serializable {
         area: String?,
         instructions: String?,
         userId: String?,
-        imgUrl: String?
+        imgUrl: String?,
+        userName: String?
     ) {
         this.name = name
         this.category = category
@@ -60,6 +64,7 @@ class Cocktail: Serializable {
         this.instructions = instructions
         this.imgUrl = imgUrl
         this.userId = userId
+        this.userName = userName
     }
 
     constructor(
@@ -83,7 +88,8 @@ class Cocktail: Serializable {
         json[IMG_URL] = imgUrl
         //        json.put(INGREDIENTS, getIngredients());
         json[LAST_UPDATED] = FieldValue.serverTimestamp()
-        json[USER_ID] = userId;
+        json[USER_ID] = userId
+        json[USERNAME] = userName
         return json
     }
 
@@ -98,6 +104,7 @@ class Cocktail: Serializable {
         const val USER_ID = "userId"
         const val LAST_UPDATED = "lastUpdated"
         const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
+        const val USERNAME = "username"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
             val name = json[NAME] as String?
             val category = json[CATEGORY] as String?
@@ -105,8 +112,9 @@ class Cocktail: Serializable {
             val instructions = json[INSTRUCTIONS] as String?
             val imgUrl = json[IMG_URL] as String?
             val userId = json[USER_ID] as String?
+            val userName = json[USERNAME] as String?
             //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
-            val cocktail = Cocktail( name, category, area, instructions, userId,imgUrl)
+            val cocktail = Cocktail( name, category, area, instructions, userId,imgUrl, userName)
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
                 cocktail.lastUpdated = time!!.seconds
