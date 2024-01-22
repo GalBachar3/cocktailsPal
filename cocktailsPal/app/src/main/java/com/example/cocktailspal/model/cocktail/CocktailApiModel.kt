@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.InputStream
 
 class CocktailApiModel private constructor() {
-    val BASE_URL = "https://www.themealdb.com/"
+    val BASE_URL = "https://www.thecocktaildb.com/"
     var retrofit: Retrofit
     var cocktailApi: CocktailApi
 
@@ -38,8 +38,14 @@ class CocktailApiModel private constructor() {
                 ) {
                     if (response.isSuccessful) {
                         val res: CocktailSearchResult? = response.body()
-                        val cocktail: CocktailApiReturnObj = res?.cocktails?.get(0)!!.toCocktail()
-                        data.setValue(cocktail)
+                        val cocktail: CocktailApiReturnObj? = res?.cocktails?.firstOrNull()?.toCocktail()
+
+                        if (cocktail != null) {
+                            data.value = cocktail!!
+                        } else {
+                            Log.d("TAG", "----- getRandomCocktail response error - cant generate cocktail")
+                        }
+
                     } else {
                         Log.d("TAG", "----- getRandomCocktail response error")
                     }

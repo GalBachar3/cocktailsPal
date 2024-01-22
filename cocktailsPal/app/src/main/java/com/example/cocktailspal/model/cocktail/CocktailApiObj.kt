@@ -5,12 +5,12 @@ import android.graphics.BitmapFactory
 import java.net.URL
 
 class CocktailApiObj(
-    var idMeal: String,
-    var strMeal: String,
+    var idDrink: String,
+    var strDrink: String,
     var strCategory: String,
     var strArea: String,
     var strInstructions: String,
-    var strMealThumb: String,
+    var strDrinkThumb: String,
     var strIngredient1: String,
     var strIngredient2: String,
     var strIngredient3: String,
@@ -54,11 +54,11 @@ class CocktailApiObj(
 ) {
     fun toCocktail(): CocktailApiReturnObj {
         val cocktail = CocktailApiReturnObj()
-        cocktail.name = (strMeal)
+        cocktail.name = (strDrink)
         cocktail.category = (strCategory)
         cocktail.instructions = (strInstructions)
         cocktail.ingredients =(ingredients)
-        val parts = strMealThumb.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val parts = strDrinkThumb.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val lastPart = parts[parts.size - 1]
         cocktail.imagePath = (lastPart)
         return cocktail
