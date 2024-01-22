@@ -88,7 +88,7 @@ class AddCocktailFragment : Fragment() {
             val category = binding.categoryEt.text.toString()
             val instructions = binding.instructionsEt.text.toString()
             val ingredients: String = binding.instructionsEt.text.toString()
-            val userId: String? = UserModel.instance().userProfileDetails?.id
+            val userId: String? = UserModel.instance().getUserId()
             val imgUrl: String? = binding.cocktailImg.tag as? String
 
             if (isCocktailFormValid(name, category,instructions)) {

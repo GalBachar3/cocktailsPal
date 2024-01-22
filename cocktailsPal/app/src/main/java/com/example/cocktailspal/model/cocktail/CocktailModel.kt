@@ -91,4 +91,24 @@ class CocktailModel private constructor() {
             return _instance
         }
     }
+
+    private var userCocktailCount = -1
+    fun getUserCocktailCount(callback: Listener<Int?>): Int? {
+        if (userCocktailCount == -1) {
+            firebaseModel.getUserCocktailCount(object : Listener<Int?> {
+                override fun onComplete(data: Int?) {
+                    if (data != null) {
+                        userCocktailCount = data
+                    }
+                    callback.onComplete(data)
+                }
+            })
+
+        }
+        return userCocktailCount
+    }
+
+    fun resetDataOnLogout() {
+        userCocktailCount = -1
+    }
 }

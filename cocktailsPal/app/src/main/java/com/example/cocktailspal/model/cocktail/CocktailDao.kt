@@ -15,6 +15,9 @@ interface CocktailDao {
     @Query("select * from Cocktail where id = :cocktailId")
     fun getCocktailById(cocktailId: String?): Cocktail?
 
+    @Query("SELECT COUNT(*) FROM Cocktail Where userId = :userId")
+    fun countCocktailByUser(userId: String?): Int?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg cocktails: Cocktail?)
 

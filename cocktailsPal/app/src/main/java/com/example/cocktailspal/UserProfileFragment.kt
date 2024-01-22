@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.cocktailspal.databinding.FragmentUserProfileBinding
+import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.squareup.picasso.Picasso
@@ -58,6 +59,11 @@ class UserProfileFragment : Fragment() {
         if(user != null){
             binding!!.fullName.setText(user?.name)
             binding!!.fullNameProfile.editText?.setText(user?.name)
+            CocktailModel.instance().getUserCocktailCount(object : CocktailModel.Listener<Int?> {
+                override fun onComplete(data: Int?) {
+                    binding?.cocktailCount?.setText(data?.toString() ?: "null")
+                }
+            })
             if (user?.avatarUrl != null && user?.avatarUrl?.length!! > 5) {
                 Picasso.get().load(user?.avatarUrl).placeholder(R.drawable.avatar)
                     .into(binding?.profileImage)

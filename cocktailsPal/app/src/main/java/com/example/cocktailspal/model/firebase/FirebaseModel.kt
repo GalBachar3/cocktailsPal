@@ -10,6 +10,7 @@ import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
@@ -156,4 +157,23 @@ class FirebaseModel {
         db.collection(Cocktail.COLLECTION).document(cocktail.name.toString()).set(cocktail.toJson())
             .addOnCompleteListener { listener.invoke(true) }
     }
+
+    fun getUserCocktailCount(callback: CocktailModel.Listener<Int?>) {
+        db.collection(Cocktail.COLLECTION)
+            .whereEqualTo(Cocktail.USER_ID, userId).get()
+            .addOnCompleteListener(object : OnCompleteListener<QuerySnapshot?> {
+                override fun onComplete(task: Task<QuerySnapshot?>) {
+                    val list: List<Cocktail> = LinkedList<Cocktail>()
+                    var count = -1
+                    if (task.isSuccessful()) {
+                        val jsonsList: QuerySnapshot = task.getResult()!!
+                        count = jsonsList.size()
+                    }
+                    callback.onComplete(count)
+                }
+            })
+    }
+
+    val userId: String
+        get() = userProfileDetails?.id.toString()
 }

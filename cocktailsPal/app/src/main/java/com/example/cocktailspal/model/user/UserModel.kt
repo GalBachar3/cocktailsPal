@@ -2,6 +2,7 @@ package com.example.cocktailspal.model.user
 
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
+import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.firebase.FirebaseModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -66,5 +67,10 @@ class UserModel private constructor() {
 
     fun logout() {
         firebaseModel!!.logout()
+        CocktailModel.instance().resetDataOnLogout()
+    }
+
+    fun getUserId(): String? {
+        return firebaseModel!!.userId
     }
 }
