@@ -7,9 +7,11 @@ import androidx.room.PrimaryKey
 import com.example.cocktailspal.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
+import java.io.Serializable
 
 @Entity
-class Cocktail {
+class Cocktail: Serializable {
+    private val serialVersionUID = 1L
     @PrimaryKey
     var name: String? = ""
     var category: String? = ""

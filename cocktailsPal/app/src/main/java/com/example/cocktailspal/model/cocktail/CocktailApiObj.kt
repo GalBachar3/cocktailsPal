@@ -3,6 +3,7 @@ package com.example.cocktailspal.model.cocktail
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.net.URL
+import com.example.cocktailspal.utils.StringUtils.isBlank
 
 class CocktailApiObj(
     var idDrink: String,
@@ -101,10 +102,4 @@ class CocktailApiObj(
             ingredients += if (!isBlank(strIngredient20)) "" else " ,$strIngredient20 - $strMeasure20"
             return ingredients
         }
-
-    private fun isBlank(str: String?): Boolean {
-        return if (str != null && !str.isEmpty() && !str.trim { it <= ' ' }.isEmpty()) {
-            true
-        } else false
-    }
 }
