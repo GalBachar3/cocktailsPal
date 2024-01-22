@@ -86,22 +86,25 @@ class AddCocktailFragment : Fragment() {
             val ingredients: String = binding.instructionsEt.text.toString()
             val userId: String? = UserModel.instance().userProfileDetails?.id
             val imgUrl: String? = binding.cocktailImg.tag as? String
-            val cocktail = Cocktail(name, category, instructions, ingredients, userId, imgUrl)
-            if (isAvatarSelected) {
-                binding.cocktailImg.setDrawingCacheEnabled(true)
-                binding.cocktailImg.buildDrawingCache()
-                val bitmap =
-                    (binding.cocktailImg.drawable as BitmapDrawable).bitmap
-                CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
-                    if (url != null) {
-                        cocktail.imgUrl = url.toString()
+
+            if (isCocktailFormValid(name, category,instructions)) {
+                val cocktail = Cocktail(name, category, instructions, ingredients, userId, imgUrl)
+                if (isAvatarSelected) {
+                    binding.cocktailImg.setDrawingCacheEnabled(true)
+                    binding.cocktailImg.buildDrawingCache()
+                    val bitmap =
+                        (binding.cocktailImg.drawable as BitmapDrawable).bitmap
+                    CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
+                        if (url != null) {
+                            cocktail.imgUrl = url.toString()
+                        }
+                        CocktailModel.instance()
+                            .addCocktail(cocktail) { findNavController(view1).popBackStack() }
                     }
+                } else {
                     CocktailModel.instance()
                         .addCocktail(cocktail) { findNavController(view1).popBackStack() }
                 }
-            } else {
-                CocktailModel.instance()
-                    .addCocktail(cocktail) { findNavController(view1).popBackStack() }
             }
         }
 
@@ -135,5 +138,27 @@ class AddCocktailFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun isCocktailFormValid(
+        name: String,
+        category: String,
+        instructions: String
+    ): Boolean {
+        var valid = true
+        if (name.isEmpty()) {
+            binding.nameEt.error = "cocktail name is required"
+            binding.nameEt.requestFocus()
+            valid = false
+        }
+        if (category.isEmpty()) {
+            binding.categoryEt.error = "cocktail category is required"
+            binding.categoryEt.requestFocus()
+        }
+        if (instructions.isEmpty()) {
+            binding.instructionsEt.error = "cocktail instructions is required"
+            binding.instructionsEt.requestFocus()
+        }
+        return valid
     }
 }

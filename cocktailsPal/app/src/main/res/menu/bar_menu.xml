@@ -5,4 +5,9 @@
         android:id="@+id/userProfileFragment"
         android:icon="@android:drawable/btn_star"
         android:title="My Profile" />
+
+    <item
+        android:id="@+id/addCocktailFragment"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Add Cocktail" />
 </menu>
