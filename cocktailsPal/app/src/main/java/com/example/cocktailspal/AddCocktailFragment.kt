@@ -1,5 +1,6 @@
 package com.example.cocktailspal
 
+import android.app.ProgressDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
@@ -11,6 +12,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,8 +39,10 @@ class AddCocktailFragment : Fragment() {
     var cameraLauncher: ActivityResultLauncher<Void>? = null
     var galleryLauncher: ActivityResultLauncher<String>? = null
     var isAvatarSelected = false
+    var progressDialog: ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        progressDialog = ProgressDialog(activity)
         val parentActivity: FragmentActivity? = activity
         parentActivity?.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -89,6 +93,10 @@ class AddCocktailFragment : Fragment() {
 
             if (isCocktailFormValid(name, category,instructions)) {
                 val cocktail = Cocktail(name, category, instructions, ingredients, userId, imgUrl)
+                progressDialog?.setMessage("Please wait while your cocktail is being added...")
+                progressDialog?.setTitle("Adding Cocktail")
+                progressDialog?.setCanceledOnTouchOutside(false)
+                progressDialog?.show()
                 if (isAvatarSelected) {
                     binding.cocktailImg.setDrawingCacheEnabled(true)
                     binding.cocktailImg.buildDrawingCache()
@@ -98,12 +106,10 @@ class AddCocktailFragment : Fragment() {
                         if (url != null) {
                             cocktail.imgUrl = url.toString()
                         }
-                        CocktailModel.instance()
-                            .addCocktail(cocktail) { findNavController(view1).popBackStack() }
+                        addCocktail(view1, cocktail)
                     }
                 } else {
-                    CocktailModel.instance()
-                        .addCocktail(cocktail) { findNavController(view1).popBackStack() }
+                    addCocktail(view1, cocktail)
                 }
             }
         }
@@ -160,5 +166,14 @@ class AddCocktailFragment : Fragment() {
             binding.instructionsEt.requestFocus()
         }
         return valid
+    }
+
+    private fun addCocktail(view: View, cocktail: Cocktail) {
+        CocktailModel.instance().addCocktail(cocktail) {
+            findNavController(view).popBackStack()
+            progressDialog?.dismiss()
+            Toast.makeText(activity, "Cocktail added successfully", Toast.LENGTH_SHORT).show()
+            true
+        }
     }
 }
