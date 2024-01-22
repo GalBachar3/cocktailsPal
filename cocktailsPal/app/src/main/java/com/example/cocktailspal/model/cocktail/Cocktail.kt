@@ -11,7 +11,6 @@ import com.google.firebase.firestore.FieldValue
 @Entity
 class Cocktail {
     @PrimaryKey
-    var id = ""
     var name: String? = ""
     var category: String? = ""
     var area: String? = ""
@@ -31,32 +30,28 @@ class Cocktail {
 
     constructor()
     constructor(
-        id: String,
         name: String?,
         category: String?,
         area: String?,
         instructions: String?,
-        imgUrl: String? //            ,  List<String> ingredients
+        userId: String? //            ,  List<String> ingredients
     ) {
-        this.id = id
         this.name = name
         this.category = category
         this.area = area
         this.instructions = instructions
-        this.imgUrl = imgUrl
+        this.userId = userId
         //        this.ingredients = ingredients;
     }
 
     constructor(
-        id: String,
         name: String?,
         category: String?,
         area: String?,
         instructions: String?,
-        imgUrl: String?,
-        userId: String?
+        userId: String?,
+        imgUrl: String?
     ) {
-        this.id = id
         this.name = name
         this.category = category
         this.area = area
@@ -66,13 +61,11 @@ class Cocktail {
     }
 
     constructor(
-        id: String,
         name: String?,
         category: String?,
         area: String?,
         instructions: String?,
         ) {
-        this.id = id
         this.name = name
         this.category = category
         this.area = area
@@ -81,7 +74,6 @@ class Cocktail {
 
     fun toJson(): Map<String, Any?> {
         val json: MutableMap<String, Any?> = HashMap()
-        json[ID] = id
         json[NAME] = name
         json[CATEGORY] = this.category
         json[AREA] = area
@@ -94,7 +86,6 @@ class Cocktail {
     }
 
     companion object {
-        const val ID = "id"
         const val NAME = "name"
         const val CATEGORY = "category"
         const val AREA = "area"
@@ -106,7 +97,6 @@ class Cocktail {
         const val LAST_UPDATED = "lastUpdated"
         const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
-            val id = json[ID] as String?
             val name = json[NAME] as String?
             val category = json[CATEGORY] as String?
             val area = json[AREA] as String?
@@ -114,7 +104,7 @@ class Cocktail {
             val imgUrl = json[IMG_URL] as String?
             val userId = json[USER_ID] as String?
             //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
-            val cocktail = Cocktail(id!!, name, category, area, instructions, imgUrl, userId)
+            val cocktail = Cocktail( name, category, area, instructions, userId,imgUrl)
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
                 cocktail.lastUpdated = time!!.seconds

@@ -89,10 +89,9 @@ class AddCocktailFragment : Fragment() {
             val instructions = binding.instructionsEt.text.toString()
             val ingredients: String = binding.instructionsEt.text.toString()
             val userId: String? = UserModel.instance().getUserId()
-            val imgUrl: String? = binding.cocktailImg.tag as? String
 
             if (isCocktailFormValid(name, category,instructions)) {
-                val cocktail = Cocktail(name, category, instructions, ingredients, userId, imgUrl)
+                val cocktail = Cocktail(name, category, instructions, ingredients, userId)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
                 progressDialog?.setTitle("Adding Cocktail")
                 progressDialog?.setCanceledOnTouchOutside(false)
