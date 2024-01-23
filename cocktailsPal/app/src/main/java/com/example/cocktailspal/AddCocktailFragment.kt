@@ -12,6 +12,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -32,11 +33,13 @@ import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import java.io.InputStream
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 
 class AddCocktailFragment : Fragment() {
 
-    lateinit var  binding: FragmentAddCocktailBinding
+    lateinit var binding: FragmentAddCocktailBinding
     var cameraLauncher: ActivityResultLauncher<Void>? = null
     var galleryLauncher: ActivityResultLauncher<String>? = null
     var isAvatarSelected = false
@@ -93,25 +96,42 @@ class AddCocktailFragment : Fragment() {
             val username: String? = user?.name
             val userId: String? = user?.id
 
-            if (isCocktailFormValid(name, category,instructions)) {
+            if (isCocktailFormValid(name, category, instructions)) {
                 val cocktail = Cocktail(name, category, instructions, ingredients, userId, username)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
                 progressDialog?.setTitle("Adding Cocktail")
                 progressDialog?.setCanceledOnTouchOutside(false)
                 progressDialog?.show()
-                if (isAvatarSelected) {
-                    binding.cocktailImg.setDrawingCacheEnabled(true)
-                    binding.cocktailImg.buildDrawingCache()
-                    val bitmap =
-                        (binding.cocktailImg.drawable as BitmapDrawable).bitmap
-                    CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
-                        if (url != null) {
-                            cocktail.imgUrl = url.toString()
+
+                val executor: Executor =
+                    Executors.newSingleThreadExecutor()
+                executor.execute {
+                    if (isAvatarSelected) {
+                        binding.cocktailImg.setDrawingCacheEnabled(true)
+                        binding.cocktailImg.buildDrawingCache()
+                        val bitmap =
+                            (binding.cocktailImg.getDrawable() as BitmapDrawable).bitmap
+                        if (CocktailModel.instance().isCocktailNameExists(cocktail.name)) {
+                            requireActivity().runOnUiThread {
+                                progressDialog!!.dismiss()
+                                binding.nameEt.setError("cocktail name already exists")
+                                binding.nameEt.requestFocus()
+                                openErrorToast(
+                                    view,
+                                    "cocktail with the same name already exist"
+                                )
+                            }
+                            return@execute
                         }
+                        CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
+                            if (url != null) {
+                                cocktail.imgUrl = url.toString()
+                            }
+                            addCocktail(view1, cocktail)
+                        }
+                    } else {
                         addCocktail(view1, cocktail)
                     }
-                } else {
-                    addCocktail(view1, cocktail)
                 }
             }
         }
@@ -126,7 +146,8 @@ class AddCocktailFragment : Fragment() {
         binding.galleryButton.setOnClickListener { galleryLauncher?.launch("image/*") }
 
         binding.generateCocktailBtn.setOnClickListener { view1 ->
-            val data: LiveData<CocktailApiReturnObj> = CocktailApiModel.instance().randomCocktail
+            val data: LiveData<CocktailApiReturnObj> =
+                CocktailApiModel.instance().randomCocktail
             data.observe(
                 viewLifecycleOwner,
                 Observer<CocktailApiReturnObj> { cocktail: CocktailApiReturnObj ->
@@ -170,12 +191,26 @@ class AddCocktailFragment : Fragment() {
         return valid
     }
 
-    private fun addCocktail(view: View, cocktail: Cocktail) {
+    fun addCocktail(view: View, cocktail: Cocktail) {
         CocktailModel.instance().addCocktail(cocktail) {
             findNavController(view).popBackStack()
             progressDialog?.dismiss()
             Toast.makeText(activity, "Cocktail added successfully", Toast.LENGTH_SHORT).show()
             true
         }
+    }
+
+    private fun openErrorToast(view: View, error: String) {
+        val inflater = layoutInflater
+        val layout = inflater.inflate(
+            R.layout.toast_layout,
+            view.findViewById<View>(R.id.toast_layout_root) as ViewGroup
+        )
+        val text = layout.findViewById<TextView>(R.id.text)
+        text.text = error
+        val toast = Toast(requireActivity().applicationContext)
+        toast.duration = Toast.LENGTH_LONG
+        toast.view = layout
+        toast.show()
     }
 }
