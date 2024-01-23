@@ -120,6 +120,11 @@ class CocktailModel private constructor() {
 //        return userCocktailCount
 //    }
 
+    fun isCocktailNameExists(cocktailName: String?): Boolean {
+        val cocktail: Cocktail? = localDb?.cocktailDao()?.findByName(cocktailName)
+        return cocktail != null
+    }
+
     private fun setCocktailsCount() {
         userCocktailCount = localDb?.cocktailDao()?.countCocktailByUser(firebaseModel.userId)!!
     }

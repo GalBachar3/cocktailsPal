@@ -18,7 +18,10 @@ interface CocktailDao {
     @Query("SELECT COUNT(*) FROM Cocktail Where userId = :userId")
     fun countCocktailByUser(userId: String?): Int?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM Cocktail Where name = :name")
+    fun findByName(name: String?): Cocktail?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg cocktails: Cocktail?)
 
     @Delete
