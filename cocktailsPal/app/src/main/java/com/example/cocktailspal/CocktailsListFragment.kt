@@ -22,11 +22,11 @@ class CocktailsListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCocktailsListBinding.inflate(inflater, container, false)
-        val view: View = binding!!.getRoot()
+        val view: View = binding!!.root
         binding?.recyclerView?.setHasFixedSize(true)
-        binding?.recyclerView?.setLayoutManager(LinearLayoutManager(context))
-        adapter = CocktailRecyclerAdapter(layoutInflater, viewModel?.data?.value)
-        binding?.recyclerView?.setAdapter(adapter)
+        binding?.recyclerView?.layoutManager = LinearLayoutManager(context)
+        adapter = CocktailRecyclerAdapter(layoutInflater, viewModel?.data?.value as List<Cocktail>?)
+        binding?.recyclerView?.adapter = adapter
 
 //        adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
 //            @Override
@@ -37,12 +37,10 @@ class CocktailsListFragment : Fragment() {
 ////                Navigation.findNavController(view).navigate(action);
 //            }
 //        });
-        binding?.progressBar?.setVisibility(View.GONE)
-        viewModel?.data?.observe(viewLifecycleOwner) { list -> adapter?.setDataa(list as List<Cocktail>?) }
+        binding?.progressBar?.visibility = View.GONE
+        viewModel?.data?.observe(viewLifecycleOwner) { list -> adapter?.setData(list as List<Cocktail>?) }
         CocktailModel.instance().EventListLoadingState.observe(viewLifecycleOwner) { status ->
-            binding!!.swipeRefresh.setRefreshing(
-                status === CocktailModel.LoadingState.LOADING
-            )
+            binding!!.swipeRefresh.isRefreshing = status === CocktailModel.LoadingState.LOADING
         }
         binding!!.swipeRefresh.setOnRefreshListener { reloadData() }
         return view

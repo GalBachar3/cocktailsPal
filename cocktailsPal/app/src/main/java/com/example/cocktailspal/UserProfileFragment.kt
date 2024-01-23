@@ -17,6 +17,9 @@ import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.squareup.picasso.Picasso
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+
 
 class UserProfileFragment : Fragment() {
     var binding: FragmentUserProfileBinding? = null
@@ -64,6 +67,13 @@ class UserProfileFragment : Fragment() {
                     binding?.cocktailCount?.setText(data?.toString() ?: "null")
                 }
             })
+
+//            val executor: Executor = Executors.newSingleThreadExecutor()
+//            executor.execute { // Perform database operation here
+//                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
+//                binding!!.cocktailCount.text = cocktailsCount.toString()
+//            }
+
             if (user?.avatarUrl != null && user?.avatarUrl?.length!! > 5) {
                 Picasso.get().load(user?.avatarUrl).placeholder(R.drawable.avatar)
                     .into(binding?.profileImage)

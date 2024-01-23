@@ -29,6 +29,7 @@ import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailApiModel
 import com.example.cocktailspal.model.cocktail.CocktailApiReturnObj
 import com.example.cocktailspal.model.cocktail.CocktailModel
+import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import java.io.InputStream
 
@@ -88,10 +89,12 @@ class AddCocktailFragment : Fragment() {
             val category = binding.categoryEt.text.toString()
             val instructions = binding.instructionsEt.text.toString()
             val ingredients: String = binding.instructionsEt.text.toString()
-            val userId: String? = UserModel.instance().getUserId()
+            val user: User? = UserModel.instance().userProfileDetails
+            val username: String? = user?.name
+            val userId: String? = user?.id
 
             if (isCocktailFormValid(name, category,instructions)) {
-                val cocktail = Cocktail(name, category, instructions, ingredients, userId)
+                val cocktail = Cocktail(name, category, instructions, ingredients, userId, username)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
                 progressDialog?.setTitle("Adding Cocktail")
                 progressDialog?.setCanceledOnTouchOutside(false)
