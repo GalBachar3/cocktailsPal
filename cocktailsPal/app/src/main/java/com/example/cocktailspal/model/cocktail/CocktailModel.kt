@@ -110,7 +110,7 @@ class CocktailModel private constructor() {
 
 //    fun getUserCocktailCount(): Int? {
 //        if (userCocktailCount == -1) {
-//            userCocktailCount = localDb?.cocktailDao()?.countCocktailByUser(firebaseModel.userId)
+//            setCocktailsCount()
 //            //            callback.onComplete(userCocktailCount);
 ////           firebaseModel.getUserCocktailCount(data -> {
 ////               userCocktailCount = data;
@@ -120,6 +120,9 @@ class CocktailModel private constructor() {
 //        return userCocktailCount
 //    }
 
+    private fun setCocktailsCount() {
+        userCocktailCount = localDb?.cocktailDao()?.countCocktailByUser(firebaseModel.userId)!!
+    }
     fun resetDataOnLogout() {
         userCocktailCount = -1
     }
