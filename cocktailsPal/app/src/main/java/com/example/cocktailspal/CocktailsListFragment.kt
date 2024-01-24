@@ -42,12 +42,17 @@ class CocktailsListFragment : Fragment() {
 
             }
         })
-        binding!!.progressBar.setVisibility(View.GONE)
-        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.data = (list as List<Cocktail>?) }
+        binding!!.progressBar.visibility = View.GONE
+        viewModel!!.data?.observe(viewLifecycleOwner) {
+            list -> adapter!!.data = (list as List<Cocktail>?)
+            if (adapter!!.itemCount == 0){
+                binding!!.noCocktailsImg.visibility = View.VISIBLE;
+            } else {
+                binding!!.noCocktailsImg.visibility = View.GONE;
+            }
+        }
         CocktailModel.instance().EventListLoadingState.observe(viewLifecycleOwner) { status ->
-            binding!!.swipeRefresh.setRefreshing(
-                status === CocktailModel.LoadingState.LOADING
-            )
+            binding!!.swipeRefresh.isRefreshing = status === CocktailModel.LoadingState.LOADING
         }
         binding!!.swipeRefresh.setOnRefreshListener { reloadData() }
         return view
