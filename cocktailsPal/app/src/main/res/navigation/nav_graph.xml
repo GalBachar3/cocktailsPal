@@ -10,6 +10,9 @@
         android:name="com.example.cocktailspal.UserProfileFragment"
         android:label="my profile"
         tools:layout="@layout/fragment_user_profile">
+        <action
+            android:id="@+id/action_userProfileFragment_to_userCocktailsListFragment"
+            app:destination="@id/userCocktailsListFragment" />
     </fragment>
 
     <fragment
@@ -17,6 +20,11 @@
         android:name="com.example.cocktailspal.AddEditCocktailFragment"
         android:label="add cocktail"
         tools:layout="@layout/fragment_add_edit_cocktail">
+        <argument
+            android:name="cocktail"
+            app:argType="com.example.cocktailspal.model.cocktail.Cocktail"
+            app:nullable="true"
+            />
     </fragment>
 
     <fragment
@@ -31,12 +39,19 @@
     <fragment
         android:id="@+id/cocktailFragment"
         android:name="com.example.cocktailspal.CocktailFragment"
-        android:label="fragment_cocktail"
+        android:label="cocktail"
         tools:layout="@layout/fragment_cocktail" >
         <argument
             android:name="cocktail"
             app:argType="com.example.cocktailspal.model.cocktail.Cocktail"/>
     </fragment>
-
-
+    <fragment
+        android:id="@+id/userCocktailsListFragment"
+        android:name="com.example.cocktailspal.UserCocktailsListFragment"
+        android:label="fragment_user_cocktails_list"
+        tools:layout="@layout/fragment_user_cocktails_list">
+    <action
+        android:id="@+id/action_userCocktailsListFragment_to_addEditCocktailFragment"
+        app:destination="@id/addEditCocktailFragment" />
+    </fragment>
 </navigation>

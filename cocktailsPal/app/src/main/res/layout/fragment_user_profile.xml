@@ -71,6 +71,7 @@
             android:layout_width="200dp"
             app:cardElevation="20dp">
             <RelativeLayout
+                android:id="@+id/userCocktails"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:padding="5dp">

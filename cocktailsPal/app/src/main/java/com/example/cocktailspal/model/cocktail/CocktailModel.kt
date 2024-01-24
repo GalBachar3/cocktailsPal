@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.cocktailspal.model.firebase.FirebaseModel
 import com.example.cocktailspal.model.localDB.AppLocalDb
 import com.example.cocktailspal.model.localDB.AppLocalDbRepository
+import java.io.ByteArrayOutputStream
+import java.net.URL
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -61,6 +63,7 @@ class CocktailModel private constructor() {
                     var time = localLastUpdate
                     list?.forEach { cocktail ->
                         cocktail?.let {
+                            cocktail.photo = (urlToByteArr(cocktail.imgUrl)!!)
                             localDb?.cocktailDao()?.insertAll(it)
                             if (time!! < it.lastUpdated!!) {
                                 time = it.lastUpdated
@@ -125,6 +128,27 @@ class CocktailModel private constructor() {
     fun isCocktailNameExists(cocktailName: String?): Boolean {
         val cocktail: Cocktail? = localDb?.cocktailDao()?.findByName(cocktailName)
         return cocktail != null
+    }
+
+    fun urlToByteArr(link: String?): ByteArray? {
+        var imageBytes: ByteArray? = null
+        try {
+            val url = URL(link)
+            val inputStream = url.openStream()
+            val outputStream = ByteArrayOutputStream()
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } != -1) {
+                outputStream.write(buffer, 0, length)
+            }
+            imageBytes = outputStream.toByteArray()
+            inputStream.close()
+            outputStream.close()
+        } catch (e: Exception) {
+            println(e)
+        } finally {
+            return imageBytes
+        }
     }
 
     private fun setCocktailsCount() {

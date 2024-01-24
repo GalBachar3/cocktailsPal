@@ -44,16 +44,16 @@ class AddEditCocktailFragment : Fragment() {
     lateinit var binding: FragmentAddEditCocktailBinding
     var cameraLauncher: ActivityResultLauncher<Void>? = null
     var galleryLauncher: ActivityResultLauncher<String>? = null
+    var cocktailParam: Cocktail? = null
     var isAvatarSelected = false
     var progressDialog: ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // TODO REPLACE CocktailFragmentArgs
-        //val cocktailParam: Cocktail = CocktailFragmentArgs.fromBundle(arguments).cocktail
-        //if (cocktailParam != null) {
-        //    setEditCocktailData(cocktailParam)
-        //}
+        val args = arguments
+        if (args != null) {
+            cocktailParam = args["cocktail"] as Cocktail?
+            setLabel()
+        }
 
         progressDialog = ProgressDialog(activity)
         val parentActivity: FragmentActivity? = activity
@@ -95,6 +95,10 @@ class AddEditCocktailFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentAddEditCocktailBinding.inflate(inflater, container, false)
         val view: View = binding.root
+
+        if (cocktailParam != null) {
+            setEditCocktailData(cocktailParam!!)
+        }
 
         binding.saveBtn.setOnClickListener { view1 ->
             val name = binding.nameEt.text.toString()
@@ -223,12 +227,16 @@ class AddEditCocktailFragment : Fragment() {
         toast.show()
     }
 
-    private fun setEditCocktailData(cocktail: Cocktail) {
+    private fun setLabel() {
         val navController = findNavController(requireActivity(), R.id.navhost)
         val currentDestination = navController.currentDestination
         if (currentDestination!!.id == R.id.addEditCocktailFragment) {
             (requireActivity() as AppCompatActivity).supportActionBar!!.setTitle("Edit Cocktail")
         }
+    }
+
+    private fun setEditCocktailData(cocktail: Cocktail) {
+
         binding.nameEt.setText(cocktail.name)
         binding.categoryEt.setText(cocktail.category)
         binding.instructionsEt.setText(cocktail.instructions)
@@ -241,5 +249,7 @@ class AddEditCocktailFragment : Fragment() {
         }
         binding.saveBtn.text = "update"
         requireActivity().title = "edit cocktail"
+        binding.generateCocktailBtn.setVisibility(View.GONE);
     }
+
 }

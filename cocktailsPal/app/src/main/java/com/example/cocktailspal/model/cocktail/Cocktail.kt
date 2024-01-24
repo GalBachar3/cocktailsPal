@@ -2,6 +2,7 @@ package com.example.cocktailspal.model.cocktail
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.cocktailspal.MyApplication
@@ -30,6 +31,9 @@ class Cocktail: Serializable {
     //    }
     //    private List<String> ingredients = new ArrayList<>();
     var lastUpdated: Long? = null
+
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    lateinit var photo: ByteArray
 
     constructor()
     constructor(

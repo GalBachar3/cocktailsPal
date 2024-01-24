@@ -1,5 +1,6 @@
 package com.example.cocktailspal
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,10 +33,15 @@ class CocktailViewHolder(
         binding.cocktailRowNameTv.setText(cocktail.name)
         binding.cocktailRowCategoryTv.setText(cocktail.category)
         binding.cocktailRowUserTv.setText(cocktail.userName)
-        if (StringUtils.isBlank(cocktail.imgUrl)) {
+        if (cocktail.photo != null) {
+            val bitmap =
+                BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)
+            binding.cocktailRowAvatarImg.setImageBitmap(bitmap)
+        } else if (StringUtils.isBlank(cocktail.imgUrl)) {
             Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)
                 .into(binding.cocktailRowAvatarImg)
-        } else {
+        }
+            else {
             binding.cocktailRowAvatarImg.setImageResource(R.drawable.chef_avatar)
         }
     }

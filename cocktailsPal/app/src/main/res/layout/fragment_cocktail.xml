@@ -4,143 +4,147 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CocktailFragment"
     android:orientation="vertical"
-    >
+    tools:context=".CocktailFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:padding="20dp"
-        android:background="@drawable/cocktail_icon">
+        android:layout_height="150dp"
+        android:background="@drawable/cocktail_icon"
+        android:padding="20dp">
 
         <ImageView
             android:id="@+id/cocktail_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerVertical="true"
             android:adjustViewBounds="false"
             android:background="@drawable/chef_avatar"
-            android:clipToOutline="true"/>
+            android:clipToOutline="true" />
 
         <TextView
             android:id="@+id/cocktail_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40sp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/cocktail_image"
+            android:fontFamily="cursive"
+            android:includeFontPadding="false"
             android:text="cocktail name"
             android:textColor="@color/black"
-            android:fontFamily="cursive"
-            android:layout_toRightOf="@+id/cocktail_image"
-            android:layout_centerVertical="true"
-            android:includeFontPadding="false"
-            android:layout_marginLeft="10dp"/>
+            android:textSize="40sp" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_height="wrap_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:layout_editor_absoluteX="79dp"
+        tools:layout_editor_absoluteY="-16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/chef_hat_icon" />
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/cocktail_category"
-                android:includeFontPadding="false"
-                android:text="category"
-                android:textSize="25sp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/chef_hat_icon" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/cocktail_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="category"
+                    android:textSize="20sp" />
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/instructions" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/cocktail_instructions"
-                android:includeFontPadding="false"
-                android:text="instructions"
-                android:textSize="25sp"
-                android:layout_marginBottom="20dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ingredients" />
-
-            <TextView
                 android:layout_marginTop="10dp"
-                android:layout_width="0dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/instructions" />
+
+                <TextView
+                    android:id="@+id/cocktail_instructions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="instructions"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/cocktail_ingredients"  android:includeFontPadding="false"
-                android:text="ingredients"
-                android:textSize="25sp"
-
-                android:layout_marginBottom="20dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/user" />
-
-            <TextView
                 android:layout_marginTop="10dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/cocktail_user_name"
-                android:includeFontPadding="false"
-                android:text="user_name"
-                android:textSize="25sp"
-                android:layout_marginBottom="20dp"/>
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ingredients" />
+
+                <TextView
+                    android:id="@+id/cocktail_ingredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="ingredients"
+
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/user" />
+
+                <TextView
+                    android:id="@+id/cocktail_user_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="user_name"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

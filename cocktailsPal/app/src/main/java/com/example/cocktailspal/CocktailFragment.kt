@@ -1,5 +1,6 @@
 package com.example.cocktailspal
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,16 +25,20 @@ class CocktailFragment : Fragment() {
         val view: View = binding!!.root
 
         val cocktail: Cocktail = CocktailFragmentArgs.fromBundle(arguments).cocktail
-        if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
-            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)
-                .into(binding?.cocktailImage)
-        } else {
+        if (cocktail.photo != null) {
+            val bitmap =
+                BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)
+            binding!!.cocktailImage.setImageBitmap(bitmap)
+        } else if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
+            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar).into(binding!!.cocktailImage);
+        }
+        else{
             binding?.cocktailImage?.setImageResource(R.drawable.chef_avatar)
         }
         binding?.cocktailName?.setText(cocktail.name)
         binding?.cocktailCategory?.setText(cocktail.category)
         binding?.cocktailInstructions?.setText(cocktail.instructions)
-        //binding?.cocktailInstructions.setText(cocktail.ingredients)
+        //binding?.cocktailIngredients?.setText(cocktail.ingredients);
         binding?.cocktailUserName?.setText(cocktail.userName)
         return view
 

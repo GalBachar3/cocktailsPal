@@ -12,13 +12,12 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import com.example.cocktailspal.databinding.FragmentUserProfileBinding
 import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.squareup.picasso.Picasso
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 
 
 class UserProfileFragment : Fragment() {
@@ -109,6 +108,13 @@ class UserProfileFragment : Fragment() {
                 }
             }
         }
+
+        binding!!.userCocktails.setOnClickListener { view1 ->
+            findNavController(view).navigate(
+                UserProfileFragmentDirections.actionUserProfileFragmentToUserCocktailsListFragment()
+            )
+        }
+
         binding?.cameraButton?.setOnClickListener { view1 -> cameraLauncher?.launch(null) }
         binding?.galleryButton?.setOnClickListener { view1 -> galleryLauncher?.launch("image/*") }
         return view

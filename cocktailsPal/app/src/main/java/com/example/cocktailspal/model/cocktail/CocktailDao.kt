@@ -26,7 +26,4 @@ interface CocktailDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg cocktails: Cocktail?)
-
-    @Delete
-    fun delete(cocktail: Cocktail?)
 }
