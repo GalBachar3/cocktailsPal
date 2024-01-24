@@ -24,24 +24,26 @@ class CocktailFragment : Fragment() {
         binding = FragmentCocktailBinding.inflate(inflater, container, false)
         val view: View = binding!!.root
 
-        val cocktail: Cocktail = CocktailFragmentArgs.fromBundle(arguments).cocktail
-        if (cocktail.photo != null) {
-            val bitmap =
-                BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)
-            binding!!.cocktailImage.setImageBitmap(bitmap)
-        } else if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
-            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar).into(binding!!.cocktailImage);
+        val cocktail: Cocktail? = CocktailFragmentArgs.fromBundle(requireArguments()).cocktail
+
+        if(cocktail!=null) {
+            if (cocktail.photo != null) {
+                val bitmap =
+                    BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)
+                binding!!.cocktailImage.setImageBitmap(bitmap)
+            } else if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
+                Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar).into(binding!!.cocktailImage);
+            }
+            else{
+                binding?.cocktailImage?.setImageResource(R.drawable.chef_avatar)
+            }
+            binding?.cocktailName?.setText(cocktail.name)
+            binding?.cocktailCategory?.setText(cocktail.category)
+            binding?.cocktailInstructions?.setText(cocktail.instructions)
+            //binding?.cocktailIngredients?.setText(cocktail.ingredients);
+            binding?.cocktailUserName?.setText(cocktail.userName)
         }
-        else{
-            binding?.cocktailImage?.setImageResource(R.drawable.chef_avatar)
-        }
-        binding?.cocktailName?.setText(cocktail.name)
-        binding?.cocktailCategory?.setText(cocktail.category)
-        binding?.cocktailInstructions?.setText(cocktail.instructions)
-        //binding?.cocktailIngredients?.setText(cocktail.ingredients);
-        binding?.cocktailUserName?.setText(cocktail.userName)
+
         return view
-
-
     }
 }

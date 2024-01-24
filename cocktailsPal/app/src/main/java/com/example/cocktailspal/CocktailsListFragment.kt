@@ -33,16 +33,17 @@ class CocktailsListFragment : Fragment() {
         adapter!!.setOnItemClickListener(object : CocktailRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(pos: Int) {
                 Log.d("TAG", "Row was clicked $pos")
-                val cocktail: Cocktail? = viewModel!!.data?.getValue()?.get(pos)
+                val cocktail: Cocktail? = viewModel?.data?.getValue()?.get(pos)
                 findNavController(view).navigate(
                     CocktailsListFragmentDirections.actionCocktailsListFragmentToCocktailFragment(
-                        cocktail
+                        cocktail!!
                     )
                 )
+
             }
         })
         binding!!.progressBar.setVisibility(View.GONE)
-        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.setData(list as List<Cocktail>?) }
+        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.data = (list as List<Cocktail>?) }
         CocktailModel.instance().EventListLoadingState.observe(viewLifecycleOwner) { status ->
             binding!!.swipeRefresh.setRefreshing(
                 status === CocktailModel.LoadingState.LOADING

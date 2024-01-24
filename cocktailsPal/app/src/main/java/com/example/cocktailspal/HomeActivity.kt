@@ -43,9 +43,9 @@ class HomeActivity : AppCompatActivity() {
                 UserModel.instance().logout()
                 sendUserToNextActivity(LoginActivity::class.java)
             }
-            R.id.addCocktailFragment -> {
+            R.id.addEditCocktailFragment -> {
                 // Make sure navController is not null and the navigation graph is set up correctly
-                navController?.navigate(R.id.addCocktailFragment)
+                navController?.navigate(R.id.addEditCocktailFragment)
             }
             else -> {
                 fragmentMenuId = item.itemId

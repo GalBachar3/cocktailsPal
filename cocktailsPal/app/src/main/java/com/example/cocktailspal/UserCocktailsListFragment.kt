@@ -37,7 +37,7 @@ class UserCocktailsListFragment : Fragment() {
             }
         })
         binding!!.progressBar.setVisibility(View.GONE)
-        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.setData(list as List<Cocktail>?) }
+        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.data = (list as List<Cocktail>?) }
         return view
     }
 

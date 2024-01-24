@@ -55,11 +55,11 @@ class CocktailRecyclerAdapter(var inflater: LayoutInflater, data: List<Cocktail?
         fun onItemClick(pos: Int)
     }
 
-    var data: List<Cocktail>?
-    fun setData(data: List<Cocktail>?) {
-        this.data = data
-        notifyDataSetChanged()
-    }
+    var data: List<Cocktail>? = data as List<Cocktail>?
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     init {
         this.data = data as List<Cocktail>?
