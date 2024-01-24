@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -25,32 +26,40 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
-import com.example.cocktailspal.databinding.FragmentAddCocktailBinding
+import com.example.cocktailspal.databinding.FragmentAddEditCocktailBinding
 import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailApiModel
 import com.example.cocktailspal.model.cocktail.CocktailApiReturnObj
 import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
+import com.squareup.picasso.Picasso
 import java.io.InputStream
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 
-class AddCocktailFragment : Fragment() {
+class AddEditCocktailFragment : Fragment() {
 
-    lateinit var binding: FragmentAddCocktailBinding
+    lateinit var binding: FragmentAddEditCocktailBinding
     var cameraLauncher: ActivityResultLauncher<Void>? = null
     var galleryLauncher: ActivityResultLauncher<String>? = null
     var isAvatarSelected = false
     var progressDialog: ProgressDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // TODO REPLACE CocktailFragmentArgs
+        //val cocktailParam: Cocktail = CocktailFragmentArgs.fromBundle(arguments).cocktail
+        //if (cocktailParam != null) {
+        //    setEditCocktailData(cocktailParam)
+        //}
+
         progressDialog = ProgressDialog(activity)
         val parentActivity: FragmentActivity? = activity
         parentActivity?.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menu.removeItem(R.id.addCocktailFragment)
+                menu.removeItem(R.id.addEditCocktailFragment)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -84,7 +93,7 @@ class AddCocktailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentAddCocktailBinding.inflate(inflater, container, false)
+        binding = FragmentAddEditCocktailBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         binding.saveBtn.setOnClickListener { view1 ->
@@ -212,5 +221,25 @@ class AddCocktailFragment : Fragment() {
         toast.duration = Toast.LENGTH_LONG
         toast.view = layout
         toast.show()
+    }
+
+    private fun setEditCocktailData(cocktail: Cocktail) {
+        val navController = findNavController(requireActivity(), R.id.navhost)
+        val currentDestination = navController.currentDestination
+        if (currentDestination!!.id == R.id.addEditCocktailFragment) {
+            (requireActivity() as AppCompatActivity).supportActionBar!!.setTitle("Edit Cocktail")
+        }
+        binding.nameEt.setText(cocktail.name)
+        binding.categoryEt.setText(cocktail.category)
+        binding.instructionsEt.setText(cocktail.instructions)
+        //binding.ingredientsEt.setText(cocktail.ingredients)
+        if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
+            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)
+                .into(binding.cocktailImg)
+        } else {
+            binding.cocktailImg.setImageResource(R.drawable.chef_avatar)
+        }
+        binding.saveBtn.text = "update"
+        requireActivity().title = "edit cocktail"
     }
 }

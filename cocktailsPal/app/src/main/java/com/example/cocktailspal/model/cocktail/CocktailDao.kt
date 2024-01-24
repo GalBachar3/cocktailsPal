@@ -12,7 +12,7 @@ interface CocktailDao {
     @get:Query("select * from Cocktail")
     val all: LiveData<List<Cocktail?>?>?
 
-    @Query("select * from Cocktail where id = :cocktailId")
+    @Query("select * from Cocktail where name = :cocktailId")
     fun getCocktailById(cocktailId: String?): Cocktail?
 
     @Query("SELECT COUNT(*) FROM Cocktail Where userId = :userId")
@@ -20,6 +20,9 @@ interface CocktailDao {
 
     @Query("SELECT * FROM Cocktail Where name = :name")
     fun findByName(name: String?): Cocktail?
+
+    @Query("SELECT * FROM Cocktail Where userId = :userId")
+    fun getAllCocktailsByUser(userId: String?): LiveData<List<Cocktail?>?>?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg cocktails: Cocktail?)

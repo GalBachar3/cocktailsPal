@@ -2,11 +2,13 @@ package com.example.cocktailspal
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cocktailspal.databinding.FragmentCocktailsListBinding
 import com.example.cocktailspal.model.cocktail.Cocktail
@@ -22,25 +24,29 @@ class CocktailsListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCocktailsListBinding.inflate(inflater, container, false)
-        val view: View = binding!!.root
-        binding?.recyclerView?.setHasFixedSize(true)
-        binding?.recyclerView?.layoutManager = LinearLayoutManager(context)
-        adapter = CocktailRecyclerAdapter(layoutInflater, viewModel?.data?.value as List<Cocktail>?)
-        binding?.recyclerView?.adapter = adapter
-
-//        adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int pos) {
-//                Log.d("TAG", "Row was clicked " + pos);
-//                Recipe st = viewModel.getData().getValue().get(pos);
-////                StudentsListFragmentDirections.ActionStudentsListFragmentToBlueFragment action = StudentsListFragmentDirections.actionStudentsListFragmentToBlueFragment(st.name);
-////                Navigation.findNavController(view).navigate(action);
-//            }
-//        });
-        binding?.progressBar?.visibility = View.GONE
-        viewModel?.data?.observe(viewLifecycleOwner) { list -> adapter?.setData(list as List<Cocktail>?) }
+        val view: View = binding!!.getRoot()
+        viewModel = ViewModelProvider(this).get(CocktailsListFragmentViewModel::class.java)
+        binding!!.recyclerView.setHasFixedSize(true)
+        binding!!.recyclerView.setLayoutManager(LinearLayoutManager(context))
+        adapter = CocktailRecyclerAdapter(layoutInflater, viewModel!!.data?.value)
+        binding!!.recyclerView.setAdapter(adapter)
+        adapter!!.setOnItemClickListener(object : CocktailRecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(pos: Int) {
+                Log.d("TAG", "Row was clicked $pos")
+                val cocktail: Cocktail? = viewModel!!.data?.getValue()?.get(pos)
+                findNavController(view).navigate(
+                    CocktailsListFragmentDirections.actionCocktailsListFragmentToCocktailFragment(
+                        cocktail
+                    )
+                )
+            }
+        })
+        binding!!.progressBar.setVisibility(View.GONE)
+        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.setData(list as List<Cocktail>?) }
         CocktailModel.instance().EventListLoadingState.observe(viewLifecycleOwner) { status ->
-            binding!!.swipeRefresh.isRefreshing = status === CocktailModel.LoadingState.LOADING
+            binding!!.swipeRefresh.setRefreshing(
+                status === CocktailModel.LoadingState.LOADING
+            )
         }
         binding!!.swipeRefresh.setOnRefreshListener { reloadData() }
         return view

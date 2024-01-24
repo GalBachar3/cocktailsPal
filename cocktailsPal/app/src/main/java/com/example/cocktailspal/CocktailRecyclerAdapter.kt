@@ -4,25 +4,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cocktailspal.CocktailRecyclerAdapter.OnItemClickListener
+import com.example.cocktailspal.databinding.CocktailRowBinding
 import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.utils.StringUtils
 import com.squareup.picasso.Picasso
 
-class CocktailViewHolder(itemView: View, listener: OnItemClickListener?, data: List<Cocktail>?) :
-    RecyclerView.ViewHolder(itemView) {
-    var nameTv: TextView
-    var categoryTv: TextView
+class CocktailViewHolder(
+    itemView: View, listener: OnItemClickListener?,
+    data: List<Cocktail>?
+) : RecyclerView.ViewHolder(itemView) {
+    var binding: CocktailRowBinding
     var data: List<Cocktail>?
-    var avatarImage: ImageView
+    var avatarImage: ImageView? = null
 
     init {
+        binding = CocktailRowBinding.bind(itemView)
         this.data = data
-        nameTv = itemView.findViewById<TextView>(R.id.cocktailRow_name_tv)
-        categoryTv = itemView.findViewById<TextView>(R.id.cocktailRow_category_tv)
-        avatarImage = itemView.findViewById<ImageView>(R.id.cocktailRow_avatar_img)
         itemView.setOnClickListener {
             val pos = adapterPosition
             listener!!.onItemClick(pos)
@@ -30,17 +29,19 @@ class CocktailViewHolder(itemView: View, listener: OnItemClickListener?, data: L
     }
 
     fun bind(cocktail: Cocktail, pos: Int) {
-        nameTv.text = cocktail.name
-        categoryTv.text = cocktail.category
+        binding.cocktailRowNameTv.setText(cocktail.name)
+        binding.cocktailRowCategoryTv.setText(cocktail.category)
+        binding.cocktailRowUserTv.setText(cocktail.userName)
         if (StringUtils.isBlank(cocktail.imgUrl)) {
-            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.avatar).into(avatarImage)
+            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)
+                .into(binding.cocktailRowAvatarImg)
         } else {
-            avatarImage.setImageResource(R.drawable.avatar)
+            binding.cocktailRowAvatarImg.setImageResource(R.drawable.chef_avatar)
         }
     }
 }
 
-class CocktailRecyclerAdapter(var inflater: LayoutInflater, data: List<Cocktail>?) :
+class CocktailRecyclerAdapter(var inflater: LayoutInflater, data: List<Cocktail?>?) :
     RecyclerView.Adapter<CocktailViewHolder>() {
     var listener: OnItemClickListener? = null
 
@@ -49,15 +50,13 @@ class CocktailRecyclerAdapter(var inflater: LayoutInflater, data: List<Cocktail>
     }
 
     var data: List<Cocktail>?
-
-    @JvmName("setDataList")
     fun setData(data: List<Cocktail>?) {
         this.data = data
         notifyDataSetChanged()
     }
 
     init {
-        this.data = data
+        this.data = data as List<Cocktail>?
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener?) {

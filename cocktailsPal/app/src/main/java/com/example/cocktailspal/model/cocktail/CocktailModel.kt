@@ -41,15 +41,18 @@ class CocktailModel private constructor() {
             return cocktailsList
         }
 
+    private var userCocktailsList: LiveData<List<Cocktail?>?>? = null
+    fun getAllUserCocktails(userId: String?): LiveData<List<Cocktail?>?>? {
+        if (userCocktailsList == null) {
+            userCocktailsList = localDb?.cocktailDao()?.getAllCocktailsByUser(userId)
+        }
+        return userCocktailsList
+    }
+
     fun refreshAllCocktails() {
         EventListLoadingState.value = LoadingState.LOADING
 
-        // get local last update
         val localLastUpdate = Cocktail.localLastUpdate
-
-        // get all updated records from firebase since local last update
-        // Calling getAllRecipesSince and providing a callback
-
 
         val callback = object : CocktailModel.Listener<List<Cocktail?>?> {
             override fun onComplete(list: List<Cocktail?>?) {
@@ -57,7 +60,6 @@ class CocktailModel private constructor() {
                     Log.d("TAG", " firebase return : ${list?.size}")
                     var time = localLastUpdate
                     list?.forEach { cocktail ->
-                        // insert new records into ROOM
                         cocktail?.let {
                             localDb?.cocktailDao()?.insertAll(it)
                             if (time!! < it.lastUpdated!!) {
