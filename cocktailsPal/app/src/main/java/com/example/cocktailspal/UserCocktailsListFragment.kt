@@ -23,12 +23,12 @@ class UserCocktailsListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCocktailsListBinding.inflate(inflater, container, false)
-        val view: View = binding!!.getRoot()
+        val view: View = binding!!.root
         viewModel = ViewModelProvider(this).get(UserCocktailsListFragmentViewModel::class.java)
         binding!!.recyclerView.setHasFixedSize(true)
-        binding!!.recyclerView.setLayoutManager(LinearLayoutManager(context))
-        adapter = CocktailRecyclerAdapter(layoutInflater, viewModel!!.data?.getValue())
-        binding!!.recyclerView.setAdapter(adapter)
+        binding!!.recyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = CocktailRecyclerAdapter(layoutInflater, viewModel!!.data?.value)
+        binding!!.recyclerView.adapter = adapter
         adapter!!.setOnItemClickListener(object : CocktailRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(pos: Int) {
                 Log.d("TAG", "Row was clicked $pos")
@@ -36,8 +36,15 @@ class UserCocktailsListFragment : Fragment() {
                 findNavController(view).navigate(UserCocktailsListFragmentDirections.actionUserCocktailsListFragmentToAddEditCocktailFragment(cocktail));
             }
         })
-        binding!!.progressBar.setVisibility(View.GONE)
-        viewModel!!.data?.observe(viewLifecycleOwner) { list -> adapter!!.data = (list as List<Cocktail>?) }
+        binding!!.progressBar.visibility = View.GONE
+        viewModel!!.data?.observe(viewLifecycleOwner) { list ->
+            adapter!!.data = (list as List<Cocktail>?)
+            if (adapter?.itemCount == 0){
+                binding?.noCocktailsImg?.visibility = View.VISIBLE;
+            } else {
+                binding?.noCocktailsImg?.visibility = View.GONE;
+            }
+        }
         return view
     }
 
