@@ -44,9 +44,13 @@ class FirebaseModel {
 
     fun registerUser(user: User, listener: UserModel.Listener<Task<Void?>?>) {
         mAuth.createUserWithEmailAndPassword(user.email.toString(), user.password.toString())
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener {
                 mUser=mAuth.currentUser;
-                updateUserProfile(user,null, listener);
+                if (mUser != null) {
+                    updateUserProfile(user,null, listener);
+                } else {
+                    listener.onComplete(null);
+                }
             }
     }
 

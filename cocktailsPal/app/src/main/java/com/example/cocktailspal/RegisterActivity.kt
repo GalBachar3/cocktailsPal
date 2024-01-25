@@ -90,17 +90,19 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun registerUser(user: User) {
         UserModel.instance().registerUser(user) { task ->
-            if (task != null) {
-                if (task.isSuccessful()) {
-                    progressDialog?.dismiss()
-                    sendUserToNextActivity()
-                    Toast.makeText(this@RegisterActivity, "Registration Successful", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    progressDialog?.dismiss()
-                    Toast.makeText(this@RegisterActivity, "" + task.getException(), Toast.LENGTH_SHORT)
-                        .show()
-                }
+            if (task == null) {
+                progressDialog?.dismiss();
+                Toast.makeText(this@RegisterActivity, "email already exist", Toast.LENGTH_SHORT).show();
+
+            } else if (task.isSuccessful()) {
+                progressDialog?.dismiss()
+                sendUserToNextActivity()
+                Toast.makeText(this@RegisterActivity, "Registration Successful", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                progressDialog?.dismiss()
+                Toast.makeText(this@RegisterActivity, "" + task.getException(), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

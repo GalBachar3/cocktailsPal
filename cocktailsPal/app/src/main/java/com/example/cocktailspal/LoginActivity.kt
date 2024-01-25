@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, "Login Successful", Toast.LENGTH_SHORT).show()
             } else {
                 progressDialog?.dismiss()
-                Toast.makeText(this@LoginActivity, "" + task.exception, Toast.LENGTH_SHORT)
+                Toast.makeText(this@LoginActivity, "Invalid username and password", Toast.LENGTH_SHORT)
                     .show()
             }
         }
