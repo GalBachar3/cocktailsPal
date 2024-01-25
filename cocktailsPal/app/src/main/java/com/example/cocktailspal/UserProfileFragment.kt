@@ -81,29 +81,31 @@ class UserProfileFragment : Fragment() {
             }
         }
 
-        binding?.updateProfileBtn?.setOnClickListener { view1 ->
-            val name: String = binding?.fullNameProfile?.editText?.getText().toString()
+        binding?.updateProfileBtn?.setOnClickListener {
+            binding?.progressBar?.visibility = View.VISIBLE;
+            val name: String = binding?.fullNameProfile?.editText?.text.toString()
             if (isFormValid(name)) {
                 var bitmap: Bitmap? = null
                 user?.name = name
                 if (isAvatarSelected) {
                     binding?.profileImage?.setDrawingCacheEnabled(true)
                     binding?.profileImage?.buildDrawingCache()
-                    bitmap = (binding?.profileImage?.getDrawable() as BitmapDrawable).getBitmap()
+                    bitmap = (binding?.profileImage?.drawable as BitmapDrawable).bitmap
                 }
                 UserModel.instance().updateUserProfile(user, bitmap) { task ->
                     if (task != null) {
-                        if (task.isSuccessful()) {
-                            binding?.fullName?.setText(user?.name)
+                        if (task.isSuccessful) {
+                            binding?.fullName?.text = user?.name
                             Toast.makeText(
                                 activity,
                                 "update user profile Successful",
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            ).show();
                         } else {
                             Toast.makeText(activity, "update user profile failed", Toast.LENGTH_SHORT)
                                 .show()
                         }
+                        binding?.progressBar?.visibility = View.GONE;
                     }
                 }
             }
