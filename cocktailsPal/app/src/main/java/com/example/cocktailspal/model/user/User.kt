@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 class User {
     @PrimaryKey
-    var id: String? = ""
+    var id: String = ""
     var email: String? = ""
     var password: String? = ""
     var name: String? = ""
@@ -25,7 +25,7 @@ class User {
         this.password = password
     }
 
-    constructor(id: String?, email: String?, password: String?, name: String?, avatarUrl: String?) {
+    constructor(id: String, email: String?, password: String?, name: String?, avatarUrl: String?) {
         this.id = id
         this.email = email
         this.password = password
@@ -33,7 +33,7 @@ class User {
         this.avatarUrl = avatarUrl
     }
 
-    constructor(id: String?, email: String?, name: String?, avatarUrl: String?) {
+    constructor(id: String, email: String?, name: String?, avatarUrl: String?) {
         this.id = id
         this.email = email
         this.name = name

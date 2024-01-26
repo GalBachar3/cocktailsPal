@@ -32,7 +32,7 @@ class CocktailViewHolder(
     fun bind(cocktail: Cocktail, pos: Int) {
         binding.cocktailRowNameTv.setText(cocktail.name)
         binding.cocktailRowCategoryTv.setText(cocktail.category)
-        binding.cocktailRowUserTv.setText(cocktail.userName)
+        binding.cocktailRowUserTv.setText(cocktail.username)
         if (cocktail.photo != null) {
             val bitmap =
                 BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)

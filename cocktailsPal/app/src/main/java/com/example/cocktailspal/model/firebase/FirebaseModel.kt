@@ -34,7 +34,7 @@ class FirebaseModel {
     init {
         db = FirebaseFirestore.getInstance()
         val settings: FirebaseFirestoreSettings = FirebaseFirestoreSettings.Builder()
-            .setPersistenceEnabled(false)
+            .setPersistenceEnabled(true)
             .build()
         db.firestoreSettings = settings
         storage = FirebaseStorage.getInstance()
@@ -55,7 +55,7 @@ class FirebaseModel {
     }
 
     fun updateUserProfile(user: User, bitmap: Bitmap?, listener: UserModel.Listener<Task<Void?>?>) {
-        val userProfileImageUri = MyApplication.myContext?.let { getImageUri(it, bitmap, user.email) }
+        val userProfileImageUri = MyApplication.getAppContext().let { getImageUri(it, bitmap, user.email) }
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(user.name)
             .setPhotoUri(userProfileImageUri)
@@ -119,7 +119,7 @@ class FirebaseModel {
         }
 
         db.collection(Cocktail.COLLECTION)
-            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(since!!, 0))
+            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(0, 0))
             .get()
             .addOnCompleteListener { task ->
                 val list: MutableList<Cocktail> = LinkedList<Cocktail>()
@@ -160,22 +160,6 @@ class FirebaseModel {
     fun addCocktail(cocktail: Cocktail, listener: (Any) -> Unit) {
         db.collection(Cocktail.COLLECTION).document(cocktail.name.toString()).set(cocktail.toJson())
             .addOnCompleteListener { listener.invoke(true) }
-    }
-
-    fun getUserCocktailCount(callback: CocktailModel.Listener<Int?>) {
-        db.collection(Cocktail.COLLECTION)
-            .whereEqualTo(Cocktail.USER_ID, userId).get()
-            .addOnCompleteListener(object : OnCompleteListener<QuerySnapshot?> {
-                override fun onComplete(task: Task<QuerySnapshot?>) {
-                    val list: List<Cocktail> = LinkedList<Cocktail>()
-                    var count = -1
-                    if (task.isSuccessful()) {
-                        val jsonsList: QuerySnapshot = task.getResult()!!
-                        count = jsonsList.size()
-                    }
-                    callback.onComplete(count)
-                }
-            })
     }
 
     val userId: String

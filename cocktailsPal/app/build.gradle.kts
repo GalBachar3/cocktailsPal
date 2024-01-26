@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs")
+    id("kotlin-kapt")
 }
 
 android {
@@ -70,21 +71,20 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-firestore:24.10.1")
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
 
     implementation("androidx.browser:browser:1.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
-    implementation ("com.google.code.gson:gson:2.6.2")
-    implementation ("com.github.bumptech.glide:glide:4.11.0")
-    implementation ("com.github.bumptech.glide:glide:4.11.0")
-
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.google.code.gson:gson:2.6.2")
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+    implementation("com.github.bumptech.glide:glide:4.11.0")
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("org.chromium.net:cronet-embedded:113.5672.61")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.navigation:navigation-fragment-ktx:$2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:$2.7.6")
@@ -93,6 +93,12 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.appcompat:appcompat:1.3.0-alpha02")
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

@@ -18,6 +18,8 @@ import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.squareup.picasso.Picasso
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 
 class UserProfileFragment : Fragment() {
@@ -58,20 +60,15 @@ class UserProfileFragment : Fragment() {
         val view: View = binding!!.getRoot()
         user = UserModel.instance().userProfileDetails
 
-        if(user != null){
+        if (user != null) {
             binding!!.fullName.setText(user?.name)
             binding!!.fullNameProfile.editText?.setText(user?.name)
-            CocktailModel.instance().getUserCocktailCount(object : CocktailModel.Listener<Int?> {
-                override fun onComplete(data: Int?) {
-                    binding?.cocktailCount?.setText(data?.toString() ?: "null")
-                }
-            })
 
-//            val executor: Executor = Executors.newSingleThreadExecutor()
-//            executor.execute { // Perform database operation here
-//                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
-//                binding!!.cocktailCount.text = cocktailsCount.toString()
-//            }
+            val executor: Executor = Executors.newSingleThreadExecutor()
+            executor.execute {
+                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
+                binding!!.cocktailCount.text = cocktailsCount.toString()
+            }
 
             if (user?.avatarUrl != null && user?.avatarUrl?.length!! > 5) {
                 Picasso.get().load(user?.avatarUrl).placeholder(R.drawable.avatar)
@@ -102,7 +99,11 @@ class UserProfileFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show();
                         } else {
-                            Toast.makeText(activity, "update user profile failed", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                activity,
+                                "update user profile failed",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                         binding?.progressBar?.visibility = View.GONE;

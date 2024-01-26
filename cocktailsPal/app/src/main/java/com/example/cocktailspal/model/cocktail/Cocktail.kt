@@ -4,24 +4,24 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.cocktailspal.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import java.io.Serializable
 
-@Entity
-class Cocktail: Serializable {
-    private val serialVersionUID = 1L
+@Entity("cocktails")
+data class Cocktail(
     @PrimaryKey
-    var name: String? = ""
-    var category: String? = ""
-    var area: String? = ""
-    var instructions: String? = ""
-    var imgUrl: String? = ""
-    var userId: String? = ""
-    var userName: String? = ""
-
+    var name: String = "",
+    var category: String? = "",
+    var area: String? = "",
+    var instructions: String? = "",
+    var imgUrl: String? = "",
+    var userId: String? = "",
+    var username: String? = "",
+    var lastUpdated: Long? = null) : Serializable {
     //    public List<String> getIngredients() {
     //        return ingredients;
     //    }
@@ -30,54 +30,54 @@ class Cocktail: Serializable {
     //        this.ingredients = ingredients;
     //    }
     //    private List<String> ingredients = new ArrayList<>();
-    var lastUpdated: Long? = null
-
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     lateinit var photo: ByteArray
 
-    constructor()
+    @Ignore
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
         userId: String?,
         userName: String?
-    ) {
+    ) : this() {
         this.name = name
         this.category = category
         this.area = area
         this.instructions = instructions
         this.userId = userId
-        this.userName = userName
+        this.username = userName
         //        this.ingredients = ingredients;
     }
 
+    @Ignore
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
         userId: String?,
         imgUrl: String?,
         userName: String?
-    ) {
+    ) : this() {
         this.name = name
         this.category = category
         this.area = area
         this.instructions = instructions
         this.imgUrl = imgUrl
         this.userId = userId
-        this.userName = userName
+        this.username = userName
     }
 
+    @Ignore
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
         userId: String?
-    ) {
+    ) : this() {
         this.name = name
         this.category = category
         this.area = area
@@ -85,12 +85,13 @@ class Cocktail: Serializable {
         this.userId = userId
     }
 
+    @Ignore
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
-        ) {
+        ) : this() {
         this.name = name
         this.category = category
         this.area = area
@@ -107,7 +108,7 @@ class Cocktail: Serializable {
         //        json.put(INGREDIENTS, getIngredients());
         json[LAST_UPDATED] = FieldValue.serverTimestamp()
         json[USER_ID] = userId
-        json[USERNAME] = userName
+        json[USERNAME] = username
         return json
     }
 
@@ -124,7 +125,7 @@ class Cocktail: Serializable {
         const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
         const val USERNAME = "username"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
-            val name = json[NAME] as String?
+            val name = json[NAME] as String
             val category = json[CATEGORY] as String?
             val area = json[AREA] as String?
             val instructions = json[INSTRUCTIONS] as String?
@@ -144,11 +145,11 @@ class Cocktail: Serializable {
         var localLastUpdate: Long?
             get() {
                 val sharedPref: SharedPreferences? =
-                    MyApplication.myContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
                 return sharedPref?.getLong(LOCAL_LAST_UPDATED, 0)
             }
             set(time) {
-                MyApplication.myContext?.let { context ->
+                MyApplication.getAppContext().let { context ->
                     val sharedPref: SharedPreferences =
                         context.getSharedPreferences("TAG", Context.MODE_PRIVATE)
                     val editor: SharedPreferences.Editor = sharedPref.edit()

@@ -4,9 +4,11 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.room.Room
+import com.example.cocktailspal.MyApplication
 import com.example.cocktailspal.model.firebase.FirebaseModel
-import com.example.cocktailspal.model.localDB.AppLocalDb
-import com.example.cocktailspal.model.localDB.AppLocalDbRepository
+import com.example.cocktailspal.model.localDB.AppDatabase
+import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.util.concurrent.Executor
@@ -16,7 +18,11 @@ import java.util.concurrent.Executors
 class CocktailModel private constructor() {
     private val executor: Executor = Executors.newSingleThreadExecutor()
     private val firebaseModel: FirebaseModel = FirebaseModel()
-    var localDb: AppLocalDbRepository? = AppLocalDb.appDb
+    var localDb = Room.databaseBuilder(
+        MyApplication.getAppContext(),
+        AppDatabase::class.java,
+        "database-name"
+    ).fallbackToDestructiveMigration().build()
 
     enum class LoadingState {
         LOADING,
@@ -37,8 +43,8 @@ class CocktailModel private constructor() {
     val allCocktails: LiveData<List<Cocktail?>?>?
         get() {
             if (cocktailsList == null) {
-                cocktailsList = localDb?.cocktailDao()?.all
                 refreshAllCocktails()
+                cocktailsList = localDb.cocktailDao().getAll()
             }
             return cocktailsList
         }
@@ -46,7 +52,7 @@ class CocktailModel private constructor() {
     private var userCocktailsList: LiveData<List<Cocktail?>?>? = null
     fun getAllUserCocktails(userId: String?): LiveData<List<Cocktail?>?>? {
         if (userCocktailsList == null) {
-            userCocktailsList = localDb?.cocktailDao()?.getAllCocktailsByUser(userId)
+            userCocktailsList = localDb.cocktailDao().getAllCocktailsByUser(userId)
         }
         return userCocktailsList
     }
@@ -61,17 +67,23 @@ class CocktailModel private constructor() {
                 executor.execute {
                     Log.d("TAG", " firebase return : ${list?.size}")
                     var time = localLastUpdate
-                    list?.forEach { cocktail ->
-                        cocktail?.let {
-                            cocktail.photo = (urlToByteArr(cocktail.imgUrl)!!)
-                            localDb?.cocktailDao()?.insertAll(it)
-                            if (time!! < it.lastUpdated!!) {
-                                time = it.lastUpdated
+                    for (cocktail in list!!) {
+                        if (cocktail != null) {
+                            if (cocktail.imgUrl != null) {
+                                //cocktail.photo = urlToByteArr(cocktail.imgUrl)!!
+                            }
+                        }
+                        if (cocktail != null) {
+                            localDb.cocktailDao().insertAll(cocktail)
+                        }
+                        if (cocktail != null) {
+                            if (time!! < cocktail.lastUpdated!!) {
+                                time = cocktail.lastUpdated
                             }
                         }
                     }
-                    // update local last update
                     Cocktail.localLastUpdate = time
+                    setCocktailsCount()
                     EventListLoadingState.postValue(LoadingState.NOT_LOADING)
                 }
             }
@@ -98,35 +110,15 @@ class CocktailModel private constructor() {
     }
 
     private var userCocktailCount = -1
-    fun getUserCocktailCount(callback: Listener<Int?>): Int? {
+    fun getUserCocktailCount(): Int? {
         if (userCocktailCount == -1) {
-            firebaseModel.getUserCocktailCount(object : Listener<Int?> {
-                override fun onComplete(data: Int?) {
-                    if (data != null) {
-                        userCocktailCount = data
-                    }
-                    callback.onComplete(data)
-                }
-            })
-
+            setCocktailsCount()
         }
         return userCocktailCount
     }
 
-//    fun getUserCocktailCount(): Int? {
-//        if (userCocktailCount == -1) {
-//            setCocktailsCount()
-//            //            callback.onComplete(userCocktailCount);
-////           firebaseModel.getUserCocktailCount(data -> {
-////               userCocktailCount = data;
-////               callback.onComplete(data);
-////           });
-//        }
-//        return userCocktailCount
-//    }
-
     fun isCocktailNameExists(cocktailName: String?): Boolean {
-        val cocktail: Cocktail? = localDb?.cocktailDao()?.findByName(cocktailName)
+        val cocktail: Cocktail? = localDb.cocktailDao().findByName(cocktailName)
         return cocktail != null
     }
 
@@ -152,7 +144,7 @@ class CocktailModel private constructor() {
     }
 
     private fun setCocktailsCount() {
-        userCocktailCount = localDb?.cocktailDao()?.countCocktailByUser(firebaseModel.userId)!!
+        userCocktailCount = localDb.cocktailDao().countCocktailByUser(firebaseModel.userId)!!
     }
     fun resetDataOnLogout() {
         userCocktailCount = -1

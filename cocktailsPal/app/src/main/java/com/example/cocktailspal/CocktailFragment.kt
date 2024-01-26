@@ -41,7 +41,7 @@ class CocktailFragment : Fragment() {
             binding?.cocktailCategory?.setText(cocktail.category)
             binding?.cocktailInstructions?.setText(cocktail.instructions)
             //binding?.cocktailIngredients?.setText(cocktail.ingredients);
-            binding?.cocktailUserName?.setText(cocktail.userName)
+            binding?.cocktailUserName?.setText(cocktail.username)
         }
 
         return view
