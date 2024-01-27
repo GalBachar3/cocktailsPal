@@ -63,7 +63,7 @@ class CocktailModel private constructor() {
                     var time = localLastUpdate
                     list?.forEach { cocktail ->
                         cocktail?.let {
-                            cocktail.photo = (urlToByteArr(cocktail.imgUrl)!!)
+//                            cocktail.photo = (urlToByteArr(cocktail.imgUrl)!!)
                             localDb?.cocktailDao()?.insertAll(it)
                             if (time!! < it.lastUpdated!!) {
                                 time = it.lastUpdated
@@ -99,7 +99,7 @@ class CocktailModel private constructor() {
 
     private var userCocktailCount = -1
     fun getUserCocktailCount(callback: Listener<Int?>): Int? {
-        if (userCocktailCount == -1) {
+//        if (userCocktailCount == -1) {
             firebaseModel.getUserCocktailCount(object : Listener<Int?> {
                 override fun onComplete(data: Int?) {
                     if (data != null) {
@@ -109,7 +109,8 @@ class CocktailModel private constructor() {
                 }
             })
 
-        }
+//        }
+//        callback.onComplete(userCocktailCount)
         return userCocktailCount
     }
 

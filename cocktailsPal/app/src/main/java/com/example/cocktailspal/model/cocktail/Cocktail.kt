@@ -12,9 +12,9 @@ import java.io.Serializable
 
 @Entity
 class Cocktail: Serializable {
-    private val serialVersionUID = 1L
+//    private val serialVersionUID = 1L
     @PrimaryKey
-    var name: String? = ""
+    var name: String = ""
     var category: String? = ""
     var area: String? = ""
     var instructions: String? = ""
@@ -37,7 +37,7 @@ class Cocktail: Serializable {
 
     constructor()
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
@@ -54,7 +54,7 @@ class Cocktail: Serializable {
     }
 
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
@@ -72,7 +72,7 @@ class Cocktail: Serializable {
     }
 
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
@@ -86,7 +86,7 @@ class Cocktail: Serializable {
     }
 
     constructor(
-        name: String?,
+        name: String,
         category: String?,
         area: String?,
         instructions: String?,
@@ -121,10 +121,10 @@ class Cocktail: Serializable {
         const val COLLECTION = "cocktails"
         const val USER_ID = "userId"
         const val LAST_UPDATED = "lastUpdated"
-        const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
+        const val LOCAL_LAST_UPDATED = "cocktails_local_last_update"
         const val USERNAME = "username"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
-            val name = json[NAME] as String?
+            val name = json[NAME] as String
             val category = json[CATEGORY] as String?
             val area = json[AREA] as String?
             val instructions = json[INSTRUCTIONS] as String?

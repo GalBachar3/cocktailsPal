@@ -68,9 +68,9 @@ class UserProfileFragment : Fragment() {
             })
 
 //            val executor: Executor = Executors.newSingleThreadExecutor()
-//            executor.execute { // Perform database operation here
-//                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
-//                binding!!.cocktailCount.text = cocktailsCount.toString()
+////            executor.execute { // Perform database operation here
+////                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
+////                binding!!.cocktailCount.text = cocktailsCount.toString()
 //            }
 
             if (user?.avatarUrl != null && user?.avatarUrl?.length!! > 5) {

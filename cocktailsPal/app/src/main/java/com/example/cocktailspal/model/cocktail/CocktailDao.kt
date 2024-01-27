@@ -25,5 +25,5 @@ interface CocktailDao {
     fun getAllCocktailsByUser(userId: String?): LiveData<List<Cocktail?>?>?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(vararg cocktails: Cocktail?)
+    fun insertAll(vararg cocktails: Cocktail)
 }

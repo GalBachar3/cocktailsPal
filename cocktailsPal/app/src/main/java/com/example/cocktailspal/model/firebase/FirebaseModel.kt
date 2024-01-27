@@ -112,14 +112,15 @@ class FirebaseModel {
         return mAuth.currentUser != null
     }
     fun getAllCocktailsSince(since: Long?, callback: CocktailModel.Listener<List<Cocktail?>?>) {
+        var s = since
+
         if (since == null) {
             // Handle the case where 'since' is null (you might want to log an error or return an empty list)
-            callback.onComplete(emptyList())
-            return
+            s = 0;
         }
 
         db.collection(Cocktail.COLLECTION)
-            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(since!!, 0))
+            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(s!!, 0))
             .get()
             .addOnCompleteListener { task ->
                 val list: MutableList<Cocktail> = LinkedList<Cocktail>()
