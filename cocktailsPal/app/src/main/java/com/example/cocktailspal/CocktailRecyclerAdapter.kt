@@ -35,7 +35,7 @@ class CocktailViewHolder(
         binding.cocktailRowUserTv.setText(cocktail.username)
         if (cocktail.photo != null) {
             val bitmap =
-                BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)
+                BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail?.photo?.size!!)
             binding.cocktailRowAvatarImg.setImageBitmap(bitmap)
         } else if (StringUtils.isBlank(cocktail.imgUrl)) {
             Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)

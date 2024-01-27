@@ -8,7 +8,6 @@ import androidx.room.Room
 import com.example.cocktailspal.MyApplication
 import com.example.cocktailspal.model.firebase.FirebaseModel
 import com.example.cocktailspal.model.localDB.AppDatabase
-import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.util.concurrent.Executor
@@ -38,22 +37,25 @@ class CocktailModel private constructor() {
         fun onComplete(data: T)
     }
 
-    private var cocktailsList: LiveData<List<Cocktail?>?>? = null
+    private var cocktailsList: MutableLiveData<List<Cocktail?>?>? = MutableLiveData()
 
     val allCocktails: LiveData<List<Cocktail?>?>?
         get() {
-            if (cocktailsList == null) {
+//            if (cocktailsList == null) {
                 refreshAllCocktails()
-                cocktailsList = localDb.cocktailDao().getAll()
-            }
+//                cocktailsList?.value = firebaseModel.getAllCocktails()
+                //cocktailsList = localDb.cocktailDao().getAll()
+//            }
             return cocktailsList
         }
 
-    private var userCocktailsList: LiveData<List<Cocktail?>?>? = null
+    private var userCocktailsList: MutableLiveData<List<Cocktail?>?>? = MutableLiveData()
     fun getAllUserCocktails(userId: String?): LiveData<List<Cocktail?>?>? {
-        if (userCocktailsList == null) {
-            userCocktailsList = localDb.cocktailDao().getAllCocktailsByUser(userId)
-        }
+        //if (userCocktailsList == null) {
+          //userCocktailsList = localDb.cocktailDao().getAllCocktailsByUser(userId) as MutableLiveData<List<Cocktail?>?>?
+       // }
+        refreshAllCocktails()
+
         return userCocktailsList
     }
 
@@ -67,24 +69,30 @@ class CocktailModel private constructor() {
                 executor.execute {
                     Log.d("TAG", " firebase return : ${list?.size}")
                     var time = localLastUpdate
-                    for (cocktail in list!!) {
-                        if (cocktail != null) {
-                            if (cocktail.imgUrl != null) {
-                                //cocktail.photo = urlToByteArr(cocktail.imgUrl)!!
-                            }
-                        }
-                        if (cocktail != null) {
-                            localDb.cocktailDao().insertAll(cocktail)
-                        }
-                        if (cocktail != null) {
-                            if (time!! < cocktail.lastUpdated!!) {
-                                time = cocktail.lastUpdated
-                            }
-                        }
-                    }
+//                    for (cocktail in list!!) {
+//                        if (cocktail != null) {
+//                            if (cocktail.imgUrl != null) {
+//                                //cocktail.photo = urlToByteArr(cocktail.imgUrl)!!
+//                            }
+//                        }
+//                        if (cocktail != null) {
+//                            localDb.cocktailDao().insertAll(cocktail)
+//                        }
+//                        if (cocktail != null) {
+//                            if (time!! < cocktail.lastUpdated!!) {
+//                                time = cocktail.lastUpdated
+//                            }
+//                        }
+//                    }
+//                    localDb.cocktailDao().insertAll(list as List<Cocktail>)
                     Cocktail.localLastUpdate = time
                     setCocktailsCount()
+
+                    cocktailsList?.postValue(list)
+                    //var aaa =list?.filter { x-> x?.userId == "" }
+                    userCocktailsList?.postValue(list)
                     EventListLoadingState.postValue(LoadingState.NOT_LOADING)
+
                 }
             }
             }

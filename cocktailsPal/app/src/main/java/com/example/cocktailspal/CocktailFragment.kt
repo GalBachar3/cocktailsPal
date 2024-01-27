@@ -29,7 +29,7 @@ class CocktailFragment : Fragment() {
         if(cocktail!=null) {
             if (cocktail.photo != null) {
                 val bitmap =
-                    BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail.photo.size)
+                    BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail?.photo?.size!!)
                 binding!!.cocktailImage.setImageBitmap(bitmap)
             } else if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
                 Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar).into(binding!!.cocktailImage);

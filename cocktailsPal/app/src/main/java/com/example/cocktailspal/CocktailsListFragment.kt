@@ -22,6 +22,7 @@ class CocktailsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        super.onCreateView(inflater, container, savedInstanceState)
         // Inflate the layout for this fragment
         binding = FragmentCocktailsListBinding.inflate(inflater, container, false)
         val view: View = binding!!.getRoot()

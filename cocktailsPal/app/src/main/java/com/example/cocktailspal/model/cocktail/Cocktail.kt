@@ -31,8 +31,7 @@ data class Cocktail(
     //    }
     //    private List<String> ingredients = new ArrayList<>();
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    lateinit var photo: ByteArray
-
+    var photo: ByteArray? = null
     @Ignore
     constructor(
         name: String,

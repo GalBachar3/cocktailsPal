@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.cocktailspal.MyApplication
 import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailModel
@@ -134,6 +135,29 @@ class FirebaseModel {
                 }
                 callback.onComplete(list)
             }
+    }
+
+    fun getAllCocktails():
+            MutableList<Cocktail> {
+        val list: MutableList<Cocktail> = LinkedList<Cocktail>()
+
+        val x = db.collection(Cocktail.COLLECTION)
+            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(0, 0))
+            .get()
+//            .addOnCompleteListener { task ->
+
+//                if (task.isSuccessful) {
+                    val jsonsList: QuerySnapshot? = x.result
+                    if (jsonsList != null) {
+                        for (json in jsonsList) {
+                            val cocktail: Cocktail = Cocktail.fromJson(json.data)
+                            list.add(cocktail)
+                        }
+                    }
+//                }
+//            }
+
+        return list;
     }
 
     fun logout() {
