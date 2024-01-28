@@ -31,6 +31,7 @@ import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailApiModel
 import com.example.cocktailspal.model.cocktail.CocktailApiReturnObj
 import com.example.cocktailspal.model.cocktail.CocktailModel
+import com.example.cocktailspal.model.firebase.FirebaseModel
 import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.squareup.picasso.Picasso
@@ -67,15 +68,13 @@ class AddEditCocktailFragment : Fragment() {
             }
         }, this, Lifecycle.State.RESUMED)
         cameraLauncher = registerForActivityResult<Void, Bitmap>(
-            ActivityResultContracts.TakePicturePreview(),
-            object : ActivityResultCallback<Bitmap?> {
-                override fun onActivityResult(result: Bitmap?) {
-                    if (result != null) {
-                        binding.cocktailImg.setImageBitmap(result)
-                        isAvatarSelected = true
-                    }
-                }
-            })
+            ActivityResultContracts.TakePicturePreview()
+        ) { result ->
+            if (result != null) {
+                binding.cocktailImg.setImageBitmap(result)
+                isAvatarSelected = true
+            }
+        }
         galleryLauncher = registerForActivityResult<String, Uri>(
             ActivityResultContracts.GetContent(),
             object : ActivityResultCallback<Uri?> {
@@ -136,12 +135,8 @@ class AddEditCocktailFragment : Fragment() {
                             }
                             return@execute
                         }
-                        CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
-                            if (url != null) {
-                                cocktail.imgUrl = url.toString()
-                            }
-                            addCocktail(view1, cocktail)
-                        }
+                        cocktail.imgUrl = FirebaseModel().getImageUri(MyApplication.getAppContext(), bitmap,cocktail.name).toString()
+                        addCocktail(view1,cocktail)
                     } else {
                         addCocktail(view1, cocktail)
                     }
