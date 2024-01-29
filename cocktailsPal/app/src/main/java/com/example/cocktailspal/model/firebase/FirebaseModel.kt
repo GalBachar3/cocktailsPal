@@ -181,8 +181,8 @@ class FirebaseModel {
         }
     }
 
-    fun addCocktail(cocktail: Cocktail, listener: (Any) -> Unit) {
-        db.collection(Cocktail.COLLECTION).document(cocktail.name.toString()).set(cocktail.toJson())
+    fun addCocktail(cocktail: Cocktail,originalName: String, listener: (Any) -> Unit) {
+        db.collection(Cocktail.COLLECTION).document(originalName).set(cocktail.toJson())
             .addOnCompleteListener { listener.invoke(true) }
     }
 

@@ -99,8 +99,8 @@ class CocktailModel private constructor() {
         firebaseModel.getAllCocktailsSince(localLastUpdate, callback);
         }
 
-    fun addCocktail(cocktail: Cocktail?, listener: () -> Boolean) {
-        firebaseModel.addCocktail(cocktail!!) { Void ->
+    fun addCocktail(cocktail: Cocktail?,originalName: String, listener: () -> Boolean) {
+        firebaseModel.addCocktail(cocktail!!,originalName) { Void ->
             refreshAllCocktails()
             listener.invoke()
         }

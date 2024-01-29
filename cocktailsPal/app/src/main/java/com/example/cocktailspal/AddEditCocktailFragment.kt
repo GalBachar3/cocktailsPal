@@ -48,6 +48,7 @@ class AddEditCocktailFragment : Fragment() {
     var cocktailParam: Cocktail? = null
     var isAvatarSelected = false
     var progressDialog: ProgressDialog? = null
+    var originalName: String? = cocktailParam?.name
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val args = arguments
@@ -96,6 +97,7 @@ class AddEditCocktailFragment : Fragment() {
         val view: View = binding.root
 
         if (cocktailParam != null) {
+            originalName = cocktailParam?.name
             setEditCocktailData(cocktailParam!!)
         }
 
@@ -136,6 +138,7 @@ class AddEditCocktailFragment : Fragment() {
                             return@execute
                         }
                         cocktail.imgUrl = FirebaseModel().getImageUri(MyApplication.getAppContext(), bitmap,cocktail.name).toString()
+
                         addCocktail(view1,cocktail)
                     } else {
                         addCocktail(view1, cocktail)
@@ -199,8 +202,16 @@ class AddEditCocktailFragment : Fragment() {
         return valid
     }
 
+    fun getCocktailName(name: String): String{
+        if(cocktailParam == null){
+            return name
+        }
+
+        return originalName!!
+    }
+
     fun addCocktail(view: View, cocktail: Cocktail) {
-        CocktailModel.instance().addCocktail(cocktail) {
+        CocktailModel.instance().addCocktail(cocktail, getCocktailName(cocktail.name)) {
             findNavController(view).popBackStack()
             progressDialog?.dismiss()
             Toast.makeText(activity, "Cocktail added successfully", Toast.LENGTH_SHORT).show()
