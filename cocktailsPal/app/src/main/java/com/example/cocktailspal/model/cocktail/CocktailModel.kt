@@ -8,6 +8,7 @@ import androidx.room.Room
 import com.example.cocktailspal.MyApplication
 import com.example.cocktailspal.model.firebase.FirebaseModel
 import com.example.cocktailspal.model.localDB.AppDatabase
+import com.example.cocktailspal.model.user.UserModel
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.util.concurrent.Executor
@@ -90,7 +91,7 @@ class CocktailModel private constructor() {
 
                     cocktailsList?.postValue(list)
                     //var aaa =list?.filter { x-> x?.userId == "" }
-                    userCocktailsList?.postValue(list)
+                    userCocktailsList?.postValue(list?.filter { x-> x?.userId == UserModel.instance().getUserId() })
                     EventListLoadingState.postValue(LoadingState.NOT_LOADING)
 
                 }

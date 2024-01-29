@@ -32,10 +32,10 @@ class CocktailFragment : Fragment() {
                     BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail?.photo?.size!!)
                 binding!!.cocktailImage.setImageBitmap(bitmap)
             } else if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
-                Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar).into(binding!!.cocktailImage);
+                Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.cocktail).into(binding!!.cocktailImage);
             }
             else{
-                binding?.cocktailImage?.setImageResource(R.drawable.chef_avatar)
+                binding?.cocktailImage?.setImageResource(R.drawable.cocktail)
             }
             binding?.cocktailName?.setText(cocktail.name)
             binding?.cocktailCategory?.setText(cocktail.category)

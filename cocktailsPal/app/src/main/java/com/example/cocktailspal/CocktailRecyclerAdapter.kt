@@ -38,11 +38,11 @@ class CocktailViewHolder(
                 BitmapFactory.decodeByteArray(cocktail.photo, 0, cocktail?.photo?.size!!)
             binding.cocktailRowAvatarImg.setImageBitmap(bitmap)
         } else if (StringUtils.isBlank(cocktail.imgUrl)) {
-            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)
+            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.cocktail)
                 .into(binding.cocktailRowAvatarImg)
         }
             else {
-            binding.cocktailRowAvatarImg.setImageResource(R.drawable.chef_avatar)
+            binding.cocktailRowAvatarImg.setImageResource(R.drawable.cocktail)
         }
     }
 }

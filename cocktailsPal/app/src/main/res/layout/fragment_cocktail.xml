@@ -20,7 +20,7 @@
             android:layout_height="100dp"
             android:layout_centerVertical="true"
             android:adjustViewBounds="false"
-            android:background="@drawable/chef_avatar"
+            android:background="@drawable/cocktail"
             android:clipToOutline="true" />
 
         <TextView

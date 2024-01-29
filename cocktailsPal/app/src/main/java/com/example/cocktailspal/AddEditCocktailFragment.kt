@@ -266,10 +266,10 @@ class AddEditCocktailFragment : Fragment() {
         binding.instructionsEt.setText(cocktail.instructions)
         //binding.ingredientsEt.setText(cocktail.ingredients)
         if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
-            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.chef_avatar)
+            Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.cocktail)
                 .into(binding.cocktailImg)
         } else {
-            binding.cocktailImg.setImageResource(R.drawable.chef_avatar)
+            binding.cocktailImg.setImageResource(R.drawable.cocktail)
         }
         binding.saveBtn.text = "update"
         requireActivity().title = "edit cocktail"
