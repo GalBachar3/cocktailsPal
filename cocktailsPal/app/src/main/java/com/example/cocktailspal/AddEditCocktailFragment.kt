@@ -38,6 +38,7 @@ import com.squareup.picasso.Picasso
 import java.io.InputStream
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import kotlin.random.Random
 
 
 class AddEditCocktailFragment : Fragment() {
@@ -48,7 +49,7 @@ class AddEditCocktailFragment : Fragment() {
     var cocktailParam: Cocktail? = null
     var isAvatarSelected = false
     var progressDialog: ProgressDialog? = null
-    var originalName: String? = cocktailParam?.name
+    var id: String? = cocktailParam?.id
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val args = arguments
@@ -97,8 +98,11 @@ class AddEditCocktailFragment : Fragment() {
         val view: View = binding.root
 
         if (cocktailParam != null) {
-            originalName = cocktailParam?.name
+            id = cocktailParam?.id
             setEditCocktailData(cocktailParam!!)
+        }
+        else{
+            binding.deleteCocktail.visibility = View.INVISIBLE;
         }
 
         binding.saveBtn.setOnClickListener { view1 ->
@@ -112,6 +116,7 @@ class AddEditCocktailFragment : Fragment() {
 
             if (isCocktailFormValid(name, category, instructions)) {
                 val cocktail = Cocktail(name, category, instructions, ingredients, userId, username)
+                initCocktailId(cocktail)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
                 progressDialog?.setTitle("Adding Cocktail")
                 progressDialog?.setCanceledOnTouchOutside(false)
@@ -152,6 +157,19 @@ class AddEditCocktailFragment : Fragment() {
                 R.id.userProfileFragment,
                 false
             )
+        }
+
+        binding.deleteCocktail.setOnClickListener { view1 ->
+            run {
+                FirebaseModel().deleteCocktail(cocktailParam!!) {
+                    CocktailModel.instance().refreshAllCocktails()
+                    findNavController(view).popBackStack()
+                    progressDialog?.dismiss()
+                    Toast.makeText(activity, "Cocktail delete successfully", Toast.LENGTH_SHORT)
+                        .show()
+                    true
+                }
+            }
         }
         binding.cameraButton.setOnClickListener { cameraLauncher?.launch(null) }
         binding.galleryButton.setOnClickListener { galleryLauncher?.launch("image/*") }
@@ -202,16 +220,16 @@ class AddEditCocktailFragment : Fragment() {
         return valid
     }
 
-    fun getCocktailName(name: String): String{
+    fun initCocktailId(cocktail: Cocktail){
         if(cocktailParam == null){
-            return name
+            cocktail.id = Random(1000).toString()
+        } else{
+            cocktail.id = id!!
         }
-
-        return originalName!!
     }
 
     fun addCocktail(view: View, cocktail: Cocktail) {
-        CocktailModel.instance().addCocktail(cocktail, getCocktailName(cocktail.name)) {
+        CocktailModel.instance().addCocktail(cocktail) {
             findNavController(view).popBackStack()
             progressDialog?.dismiss()
             Toast.makeText(activity, "Cocktail added successfully", Toast.LENGTH_SHORT).show()

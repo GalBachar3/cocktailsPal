@@ -13,6 +13,7 @@ import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -46,9 +47,9 @@ class FirebaseModel {
     fun registerUser(user: User, listener: UserModel.Listener<Task<Void?>?>) {
         mAuth.createUserWithEmailAndPassword(user.email.toString(), user.password.toString())
             .addOnCompleteListener {
-                mUser=mAuth.currentUser;
+                mUser = mAuth.currentUser;
                 if (mUser != null) {
-                    updateUserProfile(user,null, listener);
+                    updateUserProfile(user, null, listener);
                 } else {
                     listener.onComplete(null);
                 }
@@ -56,7 +57,8 @@ class FirebaseModel {
     }
 
     fun updateUserProfile(user: User, bitmap: Bitmap?, listener: UserModel.Listener<Task<Void?>?>) {
-        val userProfileImageUri = MyApplication.getAppContext().let { getImageUri(it, bitmap, user.email) }
+        val userProfileImageUri =
+            MyApplication.getAppContext().let { getImageUri(it, bitmap, user.email) }
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(user.name)
             .setPhotoUri(userProfileImageUri)
@@ -105,13 +107,15 @@ class FirebaseModel {
     fun loginUser(user: User, listener: UserModel.Listener<Task<AuthResult>>) {
         mAuth.signInWithEmailAndPassword(user.email.toString(), user.password.toString())
             .addOnCompleteListener { task ->
-                mUser=mAuth.getCurrentUser();
-                listener.onComplete(task) }
+                mUser = mAuth.getCurrentUser();
+                listener.onComplete(task)
+            }
     }
 
     fun isUserLoggedIn(): Boolean {
         return mAuth.currentUser != null
     }
+
     fun getAllCocktailsSince(since: Long?, callback: CocktailModel.Listener<List<Cocktail?>?>) {
         if (since == null) {
             // Handle the case where 'since' is null (you might want to log an error or return an empty list)
@@ -147,13 +151,13 @@ class FirebaseModel {
 //            .addOnCompleteListener { task ->
 
 //                if (task.isSuccessful) {
-                    val jsonsList: QuerySnapshot? = x.result
-                    if (jsonsList != null) {
-                        for (json in jsonsList) {
-                            val cocktail: Cocktail = Cocktail.fromJson(json.data)
-                            list.add(cocktail)
-                        }
-                    }
+        val jsonsList: QuerySnapshot? = x.result
+        if (jsonsList != null) {
+            for (json in jsonsList) {
+                val cocktail: Cocktail = Cocktail.fromJson(json.data)
+                list.add(cocktail)
+            }
+        }
 //                }
 //            }
 
@@ -181,9 +185,37 @@ class FirebaseModel {
         }
     }
 
-    fun addCocktail(cocktail: Cocktail,originalName: String, listener: (Any) -> Unit) {
-        db.collection(Cocktail.COLLECTION).document(originalName).set(cocktail.toJson())
+    fun addCocktail(cocktail: Cocktail, listener: (Any) -> Unit) {
+        db.collection(Cocktail.COLLECTION).document(cocktail.id).set(cocktail.toJson())
+          .addOnCompleteListener { listener.invoke(true) }
+
+
+        /*db.collection(Cocktail.COLLECTION).whereEqualTo(Cocktail.NAME, originalName).get()
+            .continueWithTask { querySnapshot ->
+                if (!querySnapshot.result!!.isEmpty) {
+                    val document = querySnapshot.result!!.documents[0]
+                    db.collection(Cocktail.COLLECTION).document(document.id).set(cocktail.toJson())
+                        .addOnCompleteListener(listener) { listener.invoke(true) }
+                } else {
+                    db.collection(Cocktail.COLLECTION).document(originalName).set(cocktail.toJson())
+                        .addOnCompleteListener(listener) { listener.invoke(true) }
+                }
+            }*/
+    }
+
+    fun deleteCocktail(cocktail: Cocktail ,listener: (Any) -> Unit) {
+        db.collection(Cocktail.COLLECTION).document(cocktail.id).delete()
             .addOnCompleteListener { listener.invoke(true) }
+       /* db.collection(Cocktail.COLLECTION).whereEqualTo(Cocktail.NAME, cocktail.name).get()
+            .continueWithTask { querySnapshot ->
+                if (!querySnapshot.result!!.isEmpty) {
+                    val document = querySnapshot.result!!.documents[0]
+                    db.collection(Cocktail.COLLECTION).document(document.id).delete()
+                        .addOnCompleteListener(listener) { listener.invoke(true) }
+                } else {
+                    Tasks.forResult(null)
+                }
+            }*/
     }
 
     val userId: String

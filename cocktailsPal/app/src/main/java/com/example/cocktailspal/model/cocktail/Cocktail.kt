@@ -10,10 +10,10 @@ import com.example.cocktailspal.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import java.io.Serializable
+import kotlin.random.Random
 
 @Entity("cocktails")
 data class Cocktail(
-    @PrimaryKey
     var name: String = "",
     var category: String? = "",
     var area: String? = "",
@@ -21,7 +21,10 @@ data class Cocktail(
     var imgUrl: String? = "",
     var userId: String? = "",
     var username: String? = "",
-    var lastUpdated: Long? = null) : Serializable {
+    var lastUpdated: Long? = null,
+    @PrimaryKey
+    var id: String = "")
+    : Serializable {
     //    public List<String> getIngredients() {
     //        return ingredients;
     //    }
@@ -99,6 +102,7 @@ data class Cocktail(
 
     fun toJson(): Map<String, Any?> {
         val json: MutableMap<String, Any?> = HashMap()
+        json[ID] = id
         json[NAME] = name
         json[CATEGORY] = this.category
         json[AREA] = area
@@ -112,6 +116,7 @@ data class Cocktail(
     }
 
     companion object {
+        const val ID = "id"
         const val NAME = "name"
         const val CATEGORY = "category"
         const val AREA = "area"
@@ -124,6 +129,7 @@ data class Cocktail(
         const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
         const val USERNAME = "username"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
+            val id = json[ID] as String
             val name = json[NAME] as String
             val category = json[CATEGORY] as String?
             val area = json[AREA] as String?
@@ -133,6 +139,7 @@ data class Cocktail(
             val userName = json[USERNAME] as String?
             //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
             val cocktail = Cocktail( name, category, area, instructions, userId,imgUrl, userName)
+            cocktail.id = id
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
                 cocktail.lastUpdated = time!!.seconds

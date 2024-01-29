@@ -47,6 +47,12 @@
                     android:layout_gravity="bottom|right"
                     android:layout_margin="10dp"
                     android:src="@drawable/ic_baseline_photo_camera_24" />
+
+                <Button
+                    android:id="@+id/delete_cocktail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete" />
             </FrameLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
