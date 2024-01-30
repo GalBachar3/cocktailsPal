@@ -48,7 +48,7 @@
     <fragment
         android:id="@+id/userCocktailsListFragment"
         android:name="com.example.cocktailspal.UserCocktailsListFragment"
-        android:label="fragment_user_cocktails_list"
+        android:label="User cocktails"
         tools:layout="@layout/fragment_user_cocktails_list">
     <action
         android:id="@+id/action_userCocktailsListFragment_to_addEditCocktailFragment"

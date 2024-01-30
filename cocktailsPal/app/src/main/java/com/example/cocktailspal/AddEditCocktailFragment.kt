@@ -116,6 +116,7 @@ class AddEditCocktailFragment : Fragment() {
 
             if (isCocktailFormValid(name, category, instructions)) {
                 val cocktail = Cocktail(name, category, instructions, ingredients, userId, username)
+                cocktail.imgUrl = cocktailParam?.imgUrl
                 initCocktailId(cocktail)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
                 progressDialog?.setTitle("Adding Cocktail")
