@@ -52,9 +52,6 @@ class UserModel private constructor() {
         return firebaseModel!!.isUserLoggedIn()
     }
 
-    val userProfileDetails: User?
-        get() = firebaseModel?.userProfileDetails
-
     fun updateUserProfile(user: User?, bitmap: Bitmap?, listener: Listener<Task<Void?>?>) {
         if (user != null) {
             firebaseModel?.updateUserProfile(user, bitmap) { task ->
@@ -67,10 +64,13 @@ class UserModel private constructor() {
 
     fun logout() {
         firebaseModel!!.logout()
-        CocktailModel.instance().resetDataOnLogout()
     }
 
     fun getUserId(): String? {
-        return firebaseModel!!.userId
+        return firebaseModel!!.getUserId()
+    }
+
+    fun getUserProfileDetails(): User? {
+        return firebaseModel!!.getUserProfileDetails()
     }
 }

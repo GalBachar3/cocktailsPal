@@ -6,7 +6,7 @@ import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailDao
 import com.example.cocktailspal.model.user.User
 
-@Database(entities = [Cocktail::class, User::class], version = 121)
+@Database(entities = [Cocktail::class, User::class], version = 151)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cocktailDao(): CocktailDao
 }

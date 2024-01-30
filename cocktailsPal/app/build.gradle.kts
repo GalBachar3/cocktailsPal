@@ -93,6 +93,8 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.appcompat:appcompat:1.3.0-alpha02")
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")

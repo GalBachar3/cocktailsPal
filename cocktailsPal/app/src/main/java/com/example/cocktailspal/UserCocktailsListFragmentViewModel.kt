@@ -7,6 +7,6 @@ import com.example.cocktailspal.model.cocktail.CocktailModel
 import com.example.cocktailspal.model.user.UserModel
 
 class UserCocktailsListFragmentViewModel : ViewModel() {
-    val data: LiveData<List<Cocktail?>?>? =
+    val data: LiveData<List<Cocktail>> =
         CocktailModel.instance().getAllUserCocktails(UserModel.instance().getUserId())
 }

@@ -110,7 +110,7 @@ class AddEditCocktailFragment : Fragment() {
             val category = binding.categoryEt.text.toString()
             val instructions = binding.instructionsEt.text.toString()
             val ingredients: String = binding.ingredientsEt.text.toString()
-            val user: User? = UserModel.instance().userProfileDetails
+            val user: User? = UserModel.instance().getUserProfileDetails()
             val username: String? = user?.name
             val userId: String? = user?.id
 
@@ -131,7 +131,7 @@ class AddEditCocktailFragment : Fragment() {
                         binding.cocktailImg.buildDrawingCache()
                         val bitmap =
                             (binding.cocktailImg.getDrawable() as BitmapDrawable).bitmap
-                        if (CocktailModel.instance().isCocktailNameExists(cocktail.name)) {
+                        if (cocktailParam == null && CocktailModel.instance().isCocktailNameExists(cocktail.name)) {
                             requireActivity().runOnUiThread {
                                 progressDialog!!.dismiss()
                                 binding.nameEt.setError("cocktail name already exists")
@@ -162,16 +162,10 @@ class AddEditCocktailFragment : Fragment() {
 
         binding.deleteCocktail.setOnClickListener { view1 ->
             run {
-                FirebaseModel().deleteCocktail(cocktailParam!!) {
-                    CocktailModel.instance().refreshAllCocktails()
-                    findNavController(view).popBackStack()
-                    progressDialog?.dismiss()
-                    Toast.makeText(activity, "Cocktail delete successfully", Toast.LENGTH_SHORT)
-                        .show()
-                    true
-                }
+               deleteCocktail(view1, cocktailParam!!)
             }
         }
+
         binding.cameraButton.setOnClickListener { cameraLauncher?.launch(null) }
         binding.galleryButton.setOnClickListener { galleryLauncher?.launch("image/*") }
 
@@ -234,6 +228,15 @@ class AddEditCocktailFragment : Fragment() {
             findNavController(view).popBackStack()
             progressDialog?.dismiss()
             Toast.makeText(activity, "Cocktail added successfully", Toast.LENGTH_SHORT).show()
+            true
+        }
+    }
+
+    fun deleteCocktail(view: View, cocktail: Cocktail) {
+        CocktailModel.instance().deleteCocktail(cocktail) {
+            findNavController(view).popBackStack()
+            progressDialog?.dismiss()
+            Toast.makeText(activity, "Cocktail deleted successfully", Toast.LENGTH_SHORT).show()
             true
         }
     }

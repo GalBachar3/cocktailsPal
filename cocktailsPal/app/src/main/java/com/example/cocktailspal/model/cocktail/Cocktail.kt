@@ -12,7 +12,7 @@ import com.google.firebase.firestore.FieldValue
 import java.io.Serializable
 import kotlin.random.Random
 
-@Entity("cocktails")
+@Entity()
 data class Cocktail(
     var name: String = "",
     var category: String? = "",

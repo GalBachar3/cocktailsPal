@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.example.cocktailspal.MyApplication
 import com.example.cocktailspal.model.cocktail.Cocktail
 import com.example.cocktailspal.model.cocktail.CocktailModel
@@ -13,7 +12,6 @@ import com.example.cocktailspal.model.user.User
 import com.example.cocktailspal.model.user.UserModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -81,33 +79,10 @@ class FirebaseModel {
         return Uri.parse(path)
     }
 
-    val userProfileDetails: User?
-        get() {
-            var user: User? = User()
-            if (mUser != null) {
-                for (profile in mUser!!.providerData) {
-                    // Id of the provider (ex: google.com)
-                    val providerId = profile.providerId
-
-                    // UID specific to the provider
-                    val uid = profile.uid
-
-                    // Name, email address, and profile photo Url
-                    val name = profile.displayName
-                    val email = profile.email
-                    val photoUrl = profile.photoUrl
-                    val avatarUrl = if (photoUrl == null) null else profile.photoUrl.toString()
-                    user = User(uid, email, name, avatarUrl)
-                }
-                return user
-            }
-            return null
-        }
-
     fun loginUser(user: User, listener: UserModel.Listener<Task<AuthResult>>) {
         mAuth.signInWithEmailAndPassword(user.email.toString(), user.password.toString())
             .addOnCompleteListener { task ->
-                mUser = mAuth.getCurrentUser();
+                mUser = mAuth.currentUser
                 listener.onComplete(task)
             }
     }
@@ -197,7 +172,7 @@ class FirebaseModel {
 
     fun getUserCocktailCount(callback: CocktailModel.Listener<Int?>) {
         db.collection(Cocktail.COLLECTION)
-            .whereEqualTo(Cocktail.USER_ID, userId).get()
+            .whereEqualTo(Cocktail.USER_ID, getUserId()).get()
             .addOnCompleteListener(object : OnCompleteListener<QuerySnapshot?> {
                 override fun onComplete(task: Task<QuerySnapshot?>) {
                     val list: List<Cocktail> = LinkedList<Cocktail>()
@@ -211,6 +186,24 @@ class FirebaseModel {
             })
     }
 
-    val userId: String
-        get() = userProfileDetails?.id.toString()
+    fun getUserId(): String {
+        return getUserProfileDetails()!!.id
+    }
+
+    fun getUserProfileDetails(): User? {
+        var user: User? = User()
+        if (mUser != null) {
+            for (profile in mUser!!.providerData) {
+                val providerId = profile.providerId
+                val uid = profile.uid
+                val name = profile.displayName
+                val email = profile.email
+                val photoUrl = profile.photoUrl
+                val avatarUrl = if (photoUrl == null) null else profile.photoUrl.toString()
+                user = User(uid, email, name, avatarUrl)
+            }
+            return user
+        }
+        return null
+    }
 }

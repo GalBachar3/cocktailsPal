@@ -58,7 +58,7 @@ class UserProfileFragment : Fragment() {
     ): View? {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         val view: View = binding!!.getRoot()
-        user = UserModel.instance().userProfileDetails
+        user = UserModel.instance().getUserProfileDetails()
 
         if (user != null) {
             binding!!.fullName.setText(user?.name)
@@ -66,11 +66,10 @@ class UserProfileFragment : Fragment() {
 
             val executor: Executor = Executors.newSingleThreadExecutor()
             executor.execute {
-                CocktailModel.instance().getUserCocktailCount(object : CocktailModel.Listener<Int?> {
-                    override fun onComplete(data: Int?) {
-                        binding?.cocktailCount?.setText(data?.toString() ?: "null")
-                    }
-                })
+                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
+                activity?.runOnUiThread {
+                    binding!!.cocktailCount.text = cocktailsCount.toString()
+                }
             }
 
             if (user?.avatarUrl != null && user?.avatarUrl?.length!! > 5) {
