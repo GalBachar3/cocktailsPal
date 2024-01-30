@@ -87,7 +87,6 @@ class CocktailModel private constructor() {
 //                    }
 //                    localDb.cocktailDao().insertAll(list as List<Cocktail>)
                     Cocktail.localLastUpdate = time
-                    setCocktailsCount()
 
                     cocktailsList?.postValue(list)
                     //var aaa =list?.filter { x-> x?.userId == "" }
@@ -119,10 +118,17 @@ class CocktailModel private constructor() {
     }
 
     private var userCocktailCount = -1
-    fun getUserCocktailCount(): Int? {
-        if (userCocktailCount == -1) {
-            setCocktailsCount()
-        }
+
+    fun getUserCocktailCount(callback: Listener<Int?>): Int? {
+        firebaseModel.getUserCocktailCount(object : Listener<Int?> {
+            override fun onComplete(data: Int?) {
+                if (data != null) {
+                    userCocktailCount = data
+                }
+                callback.onComplete(data)
+            }
+        })
+
         return userCocktailCount
     }
 
@@ -152,9 +158,6 @@ class CocktailModel private constructor() {
         }
     }
 
-    private fun setCocktailsCount() {
-        userCocktailCount = localDb.cocktailDao().countCocktailByUser(firebaseModel.userId)!!
-    }
     fun resetDataOnLogout() {
         userCocktailCount = -1
     }

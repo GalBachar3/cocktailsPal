@@ -66,8 +66,11 @@ class UserProfileFragment : Fragment() {
 
             val executor: Executor = Executors.newSingleThreadExecutor()
             executor.execute {
-                val cocktailsCount: Int? = CocktailModel.instance().getUserCocktailCount()
-                binding!!.cocktailCount.text = cocktailsCount.toString()
+                CocktailModel.instance().getUserCocktailCount(object : CocktailModel.Listener<Int?> {
+                    override fun onComplete(data: Int?) {
+                        binding?.cocktailCount?.setText(data?.toString() ?: "null")
+                    }
+                })
             }
 
             if (user?.avatarUrl != null && user?.avatarUrl?.length!! > 5) {

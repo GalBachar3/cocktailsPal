@@ -188,34 +188,27 @@ class FirebaseModel {
     fun addCocktail(cocktail: Cocktail, listener: (Any) -> Unit) {
         db.collection(Cocktail.COLLECTION).document(cocktail.id).set(cocktail.toJson())
           .addOnCompleteListener { listener.invoke(true) }
-
-
-        /*db.collection(Cocktail.COLLECTION).whereEqualTo(Cocktail.NAME, originalName).get()
-            .continueWithTask { querySnapshot ->
-                if (!querySnapshot.result!!.isEmpty) {
-                    val document = querySnapshot.result!!.documents[0]
-                    db.collection(Cocktail.COLLECTION).document(document.id).set(cocktail.toJson())
-                        .addOnCompleteListener(listener) { listener.invoke(true) }
-                } else {
-                    db.collection(Cocktail.COLLECTION).document(originalName).set(cocktail.toJson())
-                        .addOnCompleteListener(listener) { listener.invoke(true) }
-                }
-            }*/
     }
 
     fun deleteCocktail(cocktail: Cocktail ,listener: (Any) -> Unit) {
         db.collection(Cocktail.COLLECTION).document(cocktail.id).delete()
             .addOnCompleteListener { listener.invoke(true) }
-       /* db.collection(Cocktail.COLLECTION).whereEqualTo(Cocktail.NAME, cocktail.name).get()
-            .continueWithTask { querySnapshot ->
-                if (!querySnapshot.result!!.isEmpty) {
-                    val document = querySnapshot.result!!.documents[0]
-                    db.collection(Cocktail.COLLECTION).document(document.id).delete()
-                        .addOnCompleteListener(listener) { listener.invoke(true) }
-                } else {
-                    Tasks.forResult(null)
+    }
+
+    fun getUserCocktailCount(callback: CocktailModel.Listener<Int?>) {
+        db.collection(Cocktail.COLLECTION)
+            .whereEqualTo(Cocktail.USER_ID, userId).get()
+            .addOnCompleteListener(object : OnCompleteListener<QuerySnapshot?> {
+                override fun onComplete(task: Task<QuerySnapshot?>) {
+                    val list: List<Cocktail> = LinkedList<Cocktail>()
+                    var count = -1
+                    if (task.isSuccessful()) {
+                        val jsonsList: QuerySnapshot = task.getResult()!!
+                        count = jsonsList.size()
+                    }
+                    callback.onComplete(count)
                 }
-            }*/
+            })
     }
 
     val userId: String
