@@ -109,13 +109,13 @@ class AddEditCocktailFragment : Fragment() {
             val name = binding.nameEt.text.toString()
             val category = binding.categoryEt.text.toString()
             val instructions = binding.instructionsEt.text.toString()
-            val ingredients: String = binding.instructionsEt.text.toString()
+            val ingredients: String = binding.ingredientsEt.text.toString()
             val user: User? = UserModel.instance().userProfileDetails
             val username: String? = user?.name
             val userId: String? = user?.id
 
             if (isCocktailFormValid(name, category, instructions)) {
-                val cocktail = Cocktail(name, category, instructions, ingredients, userId, username)
+                val cocktail = Cocktail(name, category, instructions, userId, username,ingredients)
                 cocktail.imgUrl = cocktailParam?.imgUrl
                 initCocktailId(cocktail)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
@@ -184,7 +184,7 @@ class AddEditCocktailFragment : Fragment() {
                     binding.nameEt.setText(cocktail.name)
                     binding.categoryEt.setText(cocktail.category)
                     binding.instructionsEt.setText(cocktail.instructions)
-//                    binding.ingredientsEt.setText(cocktail.ingredients)
+                    binding.ingredientsEt.setText(cocktail.ingredients)
                     val imgData: LiveData<InputStream> =
                         CocktailApiModel.instance().getImg(cocktail.imagePath)
                     imgData.observe(
@@ -265,7 +265,7 @@ class AddEditCocktailFragment : Fragment() {
         binding.nameEt.setText(cocktail.name)
         binding.categoryEt.setText(cocktail.category)
         binding.instructionsEt.setText(cocktail.instructions)
-        //binding.ingredientsEt.setText(cocktail.ingredients)
+        binding.ingredientsEt.setText(cocktail.ingredients)
         if (cocktail.imgUrl != null && cocktail.imgUrl!!.length > 5) {
             Picasso.get().load(cocktail.imgUrl).placeholder(R.drawable.cocktail)
                 .into(binding.cocktailImg)

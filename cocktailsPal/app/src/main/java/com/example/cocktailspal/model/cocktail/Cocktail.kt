@@ -16,88 +16,78 @@ import kotlin.random.Random
 data class Cocktail(
     var name: String = "",
     var category: String? = "",
-    var area: String? = "",
     var instructions: String? = "",
     var imgUrl: String? = "",
     var userId: String? = "",
     var username: String? = "",
     var lastUpdated: Long? = null,
     @PrimaryKey
-    var id: String = "")
+    var id: String = "",
+    var ingredients: String? = "" )
     : Serializable {
-    //    public List<String> getIngredients() {
-    //        return ingredients;
-    //    }
-    //
-    //    public void setIngredients(List<String> ingredients) {
-    //        this.ingredients = ingredients;
-    //    }
-    //    private List<String> ingredients = new ArrayList<>();
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     var photo: ByteArray? = null
     @Ignore
     constructor(
         name: String,
         category: String?,
-        area: String?,
         instructions: String?,
         userId: String?,
-        userName: String?
-    ) : this() {
+        userName: String?,
+        ingredients: String?) : this() {
         this.name = name
         this.category = category
-        this.area = area
         this.instructions = instructions
         this.userId = userId
         this.username = userName
-        //        this.ingredients = ingredients;
+        this.ingredients = ingredients
     }
 
     @Ignore
     constructor(
         name: String,
         category: String?,
-        area: String?,
         instructions: String?,
         userId: String?,
         imgUrl: String?,
-        userName: String?
+        userName: String?,
+        ingredients: String?
     ) : this() {
         this.name = name
         this.category = category
-        this.area = area
         this.instructions = instructions
         this.imgUrl = imgUrl
         this.userId = userId
         this.username = userName
+        this.ingredients = ingredients
     }
 
     @Ignore
     constructor(
         name: String,
         category: String?,
-        area: String?,
         instructions: String?,
-        userId: String?
+        userId: String?,
+        ingredients: String?
     ) : this() {
         this.name = name
         this.category = category
-        this.area = area
         this.instructions = instructions
         this.userId = userId
+        this.ingredients = ingredients
     }
 
     @Ignore
     constructor(
         name: String,
         category: String?,
-        area: String?,
         instructions: String?,
+        ingredients: String?
         ) : this() {
         this.name = name
         this.category = category
-        this.area = area
         this.instructions = instructions
+        this.ingredients = ingredients
     }
 
     fun toJson(): Map<String, Any?> {
@@ -105,10 +95,9 @@ data class Cocktail(
         json[ID] = id
         json[NAME] = name
         json[CATEGORY] = this.category
-        json[AREA] = area
         json[INSTRUCTIONS] = instructions
         json[IMG_URL] = imgUrl
-        //        json.put(INGREDIENTS, getIngredients());
+        json[INGREDIENTS] =  ingredients
         json[LAST_UPDATED] = FieldValue.serverTimestamp()
         json[USER_ID] = userId
         json[USERNAME] = username
@@ -119,7 +108,6 @@ data class Cocktail(
         const val ID = "id"
         const val NAME = "name"
         const val CATEGORY = "category"
-        const val AREA = "area"
         const val INSTRUCTIONS = "instructions"
         const val IMG_URL = "imgUrl"
         const val INGREDIENTS = "ingredients"
@@ -132,13 +120,12 @@ data class Cocktail(
             val id = json[ID] as String
             val name = json[NAME] as String
             val category = json[CATEGORY] as String?
-            val area = json[AREA] as String?
             val instructions = json[INSTRUCTIONS] as String?
             val imgUrl = json[IMG_URL] as String?
             val userId = json[USER_ID] as String?
             val userName = json[USERNAME] as String?
-            //        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
-            val cocktail = Cocktail( name, category, area, instructions, userId,imgUrl, userName)
+            val ingredients = json[INGREDIENTS] as String?
+            val cocktail = Cocktail( name, category, instructions, userId,imgUrl, userName, ingredients)
             cocktail.id = id
             try {
                 val time = json[LAST_UPDATED] as Timestamp?
