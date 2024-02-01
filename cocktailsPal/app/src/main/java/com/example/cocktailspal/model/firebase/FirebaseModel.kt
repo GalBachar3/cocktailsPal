@@ -91,15 +91,8 @@ class FirebaseModel {
         return mAuth.currentUser != null
     }
 
-    fun getAllCocktailsSince(since: Long?, callback: CocktailModel.Listener<List<Cocktail?>?>) {
-        if (since == null) {
-            // Handle the case where 'since' is null (you might want to log an error or return an empty list)
-            callback.onComplete(emptyList())
-            return
-        }
-
+    fun getAllCocktails(callback: CocktailModel.Listener<List<Cocktail?>?>) {
         db.collection(Cocktail.COLLECTION)
-            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(0, 0))
             .get()
             .addOnCompleteListener { task ->
                 val list: MutableList<Cocktail> = LinkedList<Cocktail>()
@@ -114,29 +107,6 @@ class FirebaseModel {
                 }
                 callback.onComplete(list)
             }
-    }
-
-    fun getAllCocktails():
-            MutableList<Cocktail> {
-        val list: MutableList<Cocktail> = LinkedList<Cocktail>()
-
-        val x = db.collection(Cocktail.COLLECTION)
-            .whereGreaterThanOrEqualTo(Cocktail.LAST_UPDATED, Timestamp(0, 0))
-            .get()
-//            .addOnCompleteListener { task ->
-
-//                if (task.isSuccessful) {
-        val jsonsList: QuerySnapshot? = x.result
-        if (jsonsList != null) {
-            for (json in jsonsList) {
-                val cocktail: Cocktail = Cocktail.fromJson(json.data)
-                list.add(cocktail)
-            }
-        }
-//                }
-//            }
-
-        return list;
     }
 
     fun logout() {

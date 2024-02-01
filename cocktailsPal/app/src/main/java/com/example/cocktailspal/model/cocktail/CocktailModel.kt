@@ -40,14 +40,6 @@ class CocktailModel private constructor() {
 
     private var cocktailsList: LiveData<List<Cocktail>> = MutableLiveData()
 
-    val allCocktails: LiveData<List<Cocktail>>
-        get() {
-            refreshAllCocktails()
-            cocktailsList = localDb.cocktailDao().getAll()
-
-            return cocktailsList
-        }
-
 
     fun getAllCocktails(): LiveData<List<Cocktail>> {
         refreshAllCocktails()
@@ -72,6 +64,7 @@ class CocktailModel private constructor() {
         val callback = object : CocktailModel.Listener<List<Cocktail?>?> {
             override fun onComplete(list: List<Cocktail?>?) {
                 executor.execute {
+                    localDb.cocktailDao().deleteAll()
                     Log.d("TAG", " firebase return : ${list?.size}")
                     var time = localLastUpdate
                     for (cocktail in list!!) {
@@ -96,7 +89,7 @@ class CocktailModel private constructor() {
                 }
             }
         }
-        firebaseModel.getAllCocktailsSince(localLastUpdate, callback);
+        firebaseModel.getAllCocktails(callback);
     }
 
     fun addCocktail(cocktail: Cocktail?, listener: () -> Boolean) {
