@@ -48,6 +48,14 @@ class CocktailModel private constructor() {
             return cocktailsList
         }
 
+
+    fun getAllCocktails(): LiveData<List<Cocktail>> {
+        refreshAllCocktails()
+        cocktailsList = localDb.cocktailDao().getAll()
+
+        return cocktailsList
+    }
+
     private var userCocktailsList: LiveData<List<Cocktail>> = MutableLiveData()
     fun getAllUserCocktails(userId: String?): LiveData<List<Cocktail>> {
         refreshAllCocktails()
