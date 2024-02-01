@@ -100,8 +100,7 @@ class AddEditCocktailFragment : Fragment() {
         if (cocktailParam != null) {
             id = cocktailParam?.id
             setEditCocktailData(cocktailParam!!)
-        }
-        else{
+        } else {
             binding.deleteCocktail.visibility = View.INVISIBLE;
         }
 
@@ -115,7 +114,7 @@ class AddEditCocktailFragment : Fragment() {
             val userId: String? = user?.id
 
             if (isCocktailFormValid(name, category, instructions)) {
-                val cocktail = Cocktail(name, category, instructions, userId, username,ingredients)
+                val cocktail = Cocktail(name, category, instructions, userId, username, ingredients)
                 cocktail.imgUrl = cocktailParam?.imgUrl
                 initCocktailId(cocktail)
                 progressDialog?.setMessage("Please wait while your cocktail is being added...")
@@ -131,7 +130,9 @@ class AddEditCocktailFragment : Fragment() {
                         binding.cocktailImg.buildDrawingCache()
                         val bitmap =
                             (binding.cocktailImg.getDrawable() as BitmapDrawable).bitmap
-                        if (cocktailParam == null && CocktailModel.instance().isCocktailNameExists(cocktail.name)) {
+                        if (cocktailParam == null && CocktailModel.instance()
+                                .isCocktailNameExists(cocktail.name)
+                        ) {
                             requireActivity().runOnUiThread {
                                 progressDialog!!.dismiss()
                                 binding.nameEt.setError("cocktail name already exists")
@@ -143,9 +144,14 @@ class AddEditCocktailFragment : Fragment() {
                             }
                             return@execute
                         }
-                        cocktail.imgUrl = FirebaseModel().getImageUri(MyApplication.getAppContext(), bitmap,cocktail.name).toString()
 
-                        addCocktail(view1,cocktail)
+                        CocktailModel.instance().uploadImage(cocktail.name, bitmap) { url ->
+                            if (url != null) {
+                                cocktail.imgUrl = url.toString()
+                            }
+                            addCocktail(view1, cocktail)
+                        }
+
                     } else {
                         addCocktail(view1, cocktail)
                     }
@@ -162,7 +168,7 @@ class AddEditCocktailFragment : Fragment() {
 
         binding.deleteCocktail.setOnClickListener { view1 ->
             run {
-               deleteCocktail(view1, cocktailParam!!)
+                deleteCocktail(view1, cocktailParam!!)
             }
         }
 
@@ -215,10 +221,10 @@ class AddEditCocktailFragment : Fragment() {
         return valid
     }
 
-    fun initCocktailId(cocktail: Cocktail){
-        if(cocktailParam == null){
+    fun initCocktailId(cocktail: Cocktail) {
+        if (cocktailParam == null) {
             cocktail.id = Random(1000).toString()
-        } else{
+        } else {
             cocktail.id = id!!
         }
     }

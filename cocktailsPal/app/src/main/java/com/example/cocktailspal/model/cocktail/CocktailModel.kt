@@ -40,7 +40,6 @@ class CocktailModel private constructor() {
 
     private var cocktailsList: LiveData<List<Cocktail>> = MutableLiveData()
 
-
     fun getAllCocktails(): LiveData<List<Cocktail>> {
         refreshAllCocktails()
         cocktailsList = localDb.cocktailDao().getAll()
@@ -70,7 +69,7 @@ class CocktailModel private constructor() {
                     for (cocktail in list!!) {
                         if (cocktail != null) {
                             if (cocktail.imgUrl != null) {
-                                //cocktail.photo = urlToByteArr(cocktail.imgUrl)!!
+                                cocktail.photo = urlToByteArr(cocktail.imgUrl)!!
                             }
                         }
                         if (cocktail != null) {
