@@ -90,7 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_below="@id/cocktail_icon"
                     android:text=""
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textColor="@color/black"/>
                 <TextView
                     android:id="@+id/cocktail_title"
                     android:includeFontPadding="false"
@@ -99,6 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="Cocktails"
+                    android:textColor="@color/black"
                     android:textSize="20sp" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>

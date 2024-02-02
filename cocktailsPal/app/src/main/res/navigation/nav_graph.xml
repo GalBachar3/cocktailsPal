@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.cocktailspal.UserProfileFragment"
-        android:label="my profile"
+        android:label="My profile"
         tools:layout="@layout/fragment_user_profile">
         <action
             android:id="@+id/action_userProfileFragment_to_userCocktailsListFragment"
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/cocktailFragment"
         android:name="com.example.cocktailspal.CocktailFragment"
-        android:label="cocktail"
+        android:label="Cocktail"
         tools:layout="@layout/fragment_cocktail" >
         <argument
             android:name="cocktail"

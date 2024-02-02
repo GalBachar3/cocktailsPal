@@ -38,7 +38,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_margin="10dp"
-                    android:src="@drawable/ic_baseline_image_search_24" />
+                    android:src="@drawable/ic_baseline_image_search_24"
+                    app:tint="@android:color/black"/>
 
                 <ImageButton
                     android:id="@+id/cameraButton"
@@ -46,13 +47,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
                     android:layout_margin="10dp"
+                    app:tint="@android:color/black"
                     android:src="@drawable/ic_baseline_photo_camera_24" />
 
                 <Button
                     android:id="@+id/delete_cocktail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete" />
+                    android:text="Delete"
+                    android:textColor="@color/black"/>
             </FrameLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -66,7 +69,8 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="generate cocktail" />
+                    android:text="generate cocktail"
+                    android:textColor="@color/black"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -76,13 +80,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@color/grey">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Cocktail Name" />
+                    android:hint="Cocktail Name"
+                    android:textColor="@color/white"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -91,13 +97,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@color/grey">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/categoryEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Cocktail Category" />
+                    android:hint="Cocktail Category"
+                    android:textColor="@color/white"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -106,13 +114,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@color/grey">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ingredientsEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ingredients" />
+                    android:hint="Ingredients"
+                    android:textColor="@color/white"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -130,14 +140,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@color/grey">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/instructionsEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
-                    android:hint="Cocktail Instructions" />
+                    android:hint="Cocktail Instructions"
+                    android:textColor="@color/white"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -151,7 +163,8 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="SAVE" />
+                    android:text="SAVE"
+                    android:textColor="@color/black"/>
 
                 <Button
                     android:id="@+id/cancellBtn"
@@ -159,7 +172,8 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="CANCEL" />
+                    android:text="CANCEL"
+                    android:textColor="@color/black"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 
