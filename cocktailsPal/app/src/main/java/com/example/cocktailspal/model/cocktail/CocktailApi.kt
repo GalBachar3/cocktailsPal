@@ -10,6 +10,6 @@ interface CocktailApi {
     @GET("/api/json/v1/1/random.php")
     fun getRandomCocktail(): Call<CocktailSearchResult?>?
 
-    @GET("/images/media/drinks/{imageName}")
+    @GET("/images/media/drink/{imageName}/preview")
     fun getImage(@Path("imageName") imageName: String?): Call<ResponseBody?>?
 }

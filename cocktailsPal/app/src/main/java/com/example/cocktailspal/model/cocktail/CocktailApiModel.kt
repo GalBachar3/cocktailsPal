@@ -70,7 +70,7 @@ class CocktailApiModel private constructor() {
             }
 
             override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
-                Log.d("TAG", "----- getRandomRecipe fail")
+                Log.d("TAG", "----- getRandomCocktail fail")
             }
         })
         return data

@@ -79,7 +79,7 @@ class CocktailApiObj(
     private val ingredients: String
         private get() {
             var ingredients =
-                if (!isBlank(strIngredient1)) "" else " ,$strIngredient1 - $strMeasure1"
+                if (!isBlank(strIngredient1)) "" else " $strIngredient1 - $strMeasure1"
             ingredients += if (!isBlank(strIngredient2)) "" else " ,$strIngredient2 - $strMeasure2"
             ingredients += if (!isBlank(strIngredient3)) "" else " ,$strIngredient3 - $strMeasure3"
             ingredients += if (!isBlank(strIngredient4)) "" else " ,$strIngredient4 - $strMeasure4"

@@ -114,7 +114,7 @@ data class Cocktail(
         const val COLLECTION = "cocktails"
         const val USER_ID = "userId"
         const val LAST_UPDATED = "lastUpdated"
-        const val LOCAL_LAST_UPDATED = "recipes_local_last_update"
+        const val LOCAL_LAST_UPDATED = "cocktails_local_last_update"
         const val USERNAME = "username"
         fun fromJson(json: Map<String?, Any?>): Cocktail {
             val id = json[ID] as String
